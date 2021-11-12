@@ -12,7 +12,6 @@
 
 #ifdef WIN32
 #include <malloc.h>
-/* #define alloca _malloca */
 #else
 #include <alloca.h>
 #endif // WIN32
