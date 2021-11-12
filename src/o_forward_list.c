@@ -9,7 +9,13 @@
 #include "o_forward_list_private.h"
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef WIN32
+#include <malloc.h>
+/* #define alloca _malloca */
+#else
 #include <alloca.h>
+#endif // WIN32
 
 #include <o_functions.h>
 
@@ -51,10 +57,6 @@ void o_forward_list_clear(o_forward_list_t* list) {
     }
 }
 
-void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, void* data) {
-    memcpy(node->data, data, list->data_type_size);
-}
-
 size_t o_forward_list_get_type_size(o_forward_list_t* list) {
     return list->data_type_size;
 }
@@ -90,7 +92,7 @@ o_forward_list_node_t* o_forward_list_end(o_forward_list_t* list) {
 }
 
 void o_forward_list_node_insert_after(o_forward_list_t* list, o_forward_list_node_t* node, void* data) {
-    o_forward_list_node_t* node_after_insert =o_forward_list_node_get_next(node);
+    o_forward_list_node_t* node_after_insert = o_forward_list_node_get_next(list, node);
     node->next = malloc(sizeof(o_forward_list_node_t) + list->data_type_size);
     memcpy(node->next->data, data, list->data_type_size);
     node->next->next = node_after_insert;
@@ -100,8 +102,8 @@ void o_forward_list_node_splice_after(o_forward_list_t* list, o_forward_list_nod
     o_forward_list_node_t* node_after_insert = node->next;
     node->next = o_forward_list_begin(insert_list);
     o_forward_list_node_t* current_node = node->next;
-    while (o_forward_list_node_get_next(current_node) != o_forward_list_end(insert_list)) {
-        current_node = o_forward_list_node_get_next(current_node);
+    while (o_forward_list_node_get_next(list, current_node) != o_forward_list_end(insert_list)) {
+        current_node = o_forward_list_node_get_next(list, current_node);
     }
     current_node->next = node_after_insert;
     free(insert_list);

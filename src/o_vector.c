@@ -76,12 +76,12 @@ void o_vector_push_back_array(o_vector_t* vec, void* data, size_t data_amount) {
     vec->size += data_amount;
 }
 
-void* o_vector_begin(o_vector_t* vec) {
+o_vector_node_t* o_vector_begin(o_vector_t* vec) {
     return vec->data;
 }
 
-void* o_vector_end(o_vector_t* vec) {
-    return (char*)vec->data + vec->size * vec->data_type_size;
+o_vector_node_t* o_vector_end(o_vector_t* vec) {
+    return (void*)((char*)vec->data + vec->size * vec->data_type_size);
 }
 
 bool o_vector_empty(o_vector_t* vec) {
@@ -126,7 +126,7 @@ size_t o_vector_get_type_size(o_vector_t* vec) {
 }
 
 o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node) {
-    return (char*)node + vec->data_type_size;
+    return (void*)((char*)node + vec->data_type_size);
 }
 
 void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, void* data) {
@@ -134,5 +134,5 @@ void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, void* data)
 }
 
 o_vector_node_t* o_vector_node_get_value(o_vector_t* vec, o_vector_node_t* node) {
-    return node->data;
+    return (void*)node->data;
 }

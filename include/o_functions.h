@@ -5,8 +5,14 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+#ifdef _GNUC_
 #define o_likely(x)       __builtin_expect(!!(x),1)
 #define o_unlikely(x)     __builtin_expect((x),0)
+#else
+#define o_likely(x)       x
+#define o_unlikely(x)     x
+#endif
+
 #define o_swap(a, b) do { __typeof__(a) temp = a; a = b; b = temp; } while (0)
 
 #define o_max(a,b) \

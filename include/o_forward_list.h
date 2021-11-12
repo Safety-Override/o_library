@@ -49,6 +49,6 @@ void o_forward_list_node_erase_after(o_forward_list_t* list, o_forward_list_node
 
 o_forward_list_node_t* o_forward_list_node_get_next(o_forward_list_t* list, o_forward_list_node_t* node);
 
-void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, void* data)
+void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, void* data);
 
 void* o_forward_list_node_get_value(o_forward_list_t* list, o_forward_list_node_t* node);
