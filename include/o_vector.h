@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 typedef struct o_vector_s o_vector_t;
 typedef struct o_vector_node_s o_vector_node_t;

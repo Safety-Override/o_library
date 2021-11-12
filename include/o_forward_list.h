@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <limits.h>
 
 typedef struct o_forward_list_node_s o_forward_list_node_t;
 typedef struct o_forward_list_s o_forward_list_t;

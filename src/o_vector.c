@@ -14,6 +14,7 @@
 #include <stdbool.h>
 
 #include <o_functions.h>
+#include <limits.h>
 
 static inline size_t next_pow2(size_t x) {
     return x == 1 ? 1 : 1 << (CHAR_BIT * sizeof(unsigned) - __builtin_clz((unsigned)x - 1)); 
