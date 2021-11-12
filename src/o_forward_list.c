@@ -79,7 +79,7 @@ void o_forward_list_resize(o_forward_list_t* list, size_t new_size) {
 }
 
 o_forward_list_node_t* o_forward_list_before_begin(o_forward_list_t* list) {
-    return list;
+    return (void*)list;
 }
 
 o_forward_list_node_t* o_forward_list_begin(o_forward_list_t* list) {

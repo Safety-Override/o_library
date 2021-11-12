@@ -6,8 +6,6 @@ set (SRCS
     src/o_vector.c
     )
 
-set (PROJECT_STATIC ${PROJECT_NAME}_static)
-
 add_library(${PROJECT_NAME} SHARED ${SRCS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE src)
