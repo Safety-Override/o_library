@@ -4,6 +4,7 @@ project(o_library C)
 set (SRCS
     src/o_forward_list.c
     src/o_vector.c
+    src/o_container.c
     )
 
 add_library(${PROJECT_NAME} SHARED ${SRCS})

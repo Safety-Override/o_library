@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "o_forward_list_private.h": "c",
+        "o_container_private.h": "c",
+        "o_container.h": "c"
+    }
+}

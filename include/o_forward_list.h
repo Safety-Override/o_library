@@ -10,8 +10,8 @@
 #include <stddef.h>
 #include <limits.h>
 
-typedef struct o_forward_list_node_s o_forward_list_node_t;
 typedef struct o_forward_list_s o_forward_list_t;
+typedef struct o_forward_list_node_s o_forward_list_node_t;
 
 o_forward_list_t* o_forward_list_create_t(size_t data_type_size);
 #define o_list_create(T)        \

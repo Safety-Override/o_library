@@ -5,15 +5,6 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-#include <stdint.h>
-
-struct o_vector_s {
-    size_t size;
-    size_t capacity;
-    size_t data_type_size;
-    void* data;
-};
-
-struct o_vector_node_s {
+struct o_container_node_s {
     char data[0];
 };
