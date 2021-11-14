@@ -13,9 +13,10 @@ typedef struct o_vector_s o_vector_t;
 typedef struct o_vector_node_s o_vector_node_t;
 
 o_vector_t* o_vector_create_t(size_t data_type_size);
-#define o_vector_create(T)     \
-({                             \
-o_vector_create_t(sizeof(T)); \
+
+#define o_vector_create(T)        \
+({                                \
+    o_vector_create_t(sizeof(T)); \
 })
 
 #define o_vector_for_each(vector, entry)          \

@@ -5,11 +5,11 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-#include "../include/o_container.h"
+#include "o_container.h"
 #include "o_container_private.h"
 
-#include "../include/o_forward_list.h"
-#include "../include/o_vector.h"
+#include "o_forward_list.h"
+#include "o_vector.h"
 
 o_container_node_t* o_container_begin(o_container_t container)
 {

@@ -20,7 +20,7 @@ static inline size_t next_pow2(size_t x) {
     return x == 1 ? 1 : 1 << (CHAR_BIT * sizeof(unsigned) - __builtin_clz((unsigned)x - 1)); 
 }
 
-o_vector_t* o_vector_create_ex(size_t data_type_size) {
+o_vector_t* o_vector_create_t(size_t data_type_size) {
     o_vector_t* temp = calloc(1, sizeof(o_vector_t));
     temp->data_type_size = data_type_size;
     return temp;
