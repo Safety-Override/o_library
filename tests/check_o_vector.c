@@ -1,6 +1,6 @@
 #include <check.h>
 #include <o_vector.h>
-#include <../src/o_vector_private.h>
+#include <o_vector_private.h>
 
 void setup(void) {
 }

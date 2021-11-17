@@ -4,4 +4,6 @@ project(o_library_tests)
 
 add_executable(check_o_vector check_o_vector.c)
 
+target_include_directories(check_o_vector PRIVATE ../src)
+
 target_link_libraries(check_o_vector o_library check subunit pthread rt)
