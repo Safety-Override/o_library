@@ -70,6 +70,54 @@ START_TEST(o_vector_reserve_test) {
 }
 END_TEST
 
+START_TEST(o_vector_push_back_test) {
+    o_vector_t* vector = o_vector_create(int);
+    ck_assert_int_eq(vector->size, 0);
+    int a = 31111;
+    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &a);
+    ck_assert_int_eq(vector->size, 2);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), a);
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(o_vector_set_test) {
+    o_vector_t* vector = o_vector_create(int);
+    int a = 31111;
+    int b = 0;
+    o_vector_push_back(vector, &b);
+    o_vector_push_back(vector, &b);
+    o_vector_set(vector, 1, &a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), a);
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(o_vector_get_test) {
+    o_vector_t* vector = o_vector_create(int);
+    int a = 31111;
+    int b = 0;
+    o_vector_push_back(vector, &b);
+    o_vector_push_back(vector, &b);
+    o_vector_set(vector, 1, &a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), a);
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(o_vector_pop_back_test) {
+    o_vector_t* vector = o_vector_create(int);
+    int a = 31111;
+    int b = 0;
+    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &b);
+    o_vector_pop_back(vector);
+    ck_assert_int_eq(vector->size, 1);
+    o_vector_destroy(vector);
+}
+END_TEST
+
 Suite* suite_zero(void)
 {
     Suite* s;
@@ -80,6 +128,10 @@ Suite* suite_zero(void)
     tcase_add_test(tc, o_vector_for_each_test);
     tcase_add_test(tc, o_vector_size_test);
     tcase_add_test(tc, o_vector_reserve_test);
+    tcase_add_test(tc, o_vector_push_back_test);
+    tcase_add_test(tc, o_vector_set_test);
+    tcase_add_test(tc, o_vector_get_test);
+    tcase_add_test(tc, o_vector_pop_back_test);
     suite_add_tcase(s, tc);
     return s;
 }
