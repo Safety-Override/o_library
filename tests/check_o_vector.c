@@ -14,6 +14,7 @@ START_TEST(o_vector_create_test) {
     ck_assert_int_eq(vector->size, 0);
     ck_assert_int_eq(vector->capacity, 0);
     ck_assert_int_eq(vector->data_type_size, sizeof(int));
+    o_vector_destroy(vector);
 }
 END_TEST
 
@@ -37,6 +38,7 @@ START_TEST(o_vector_for_each_test) {
     o_vector_for_each(vector, node) {
         ck_assert_int_eq(b[i++], *(int*)o_vector_node_get_value(vector, node));
     }
+    o_vector_destroy(vector);
 }
 END_TEST
 
@@ -48,6 +50,7 @@ START_TEST(o_vector_size_test) {
     ck_assert_int_eq(vector->size, 1);
     o_vector_push_back(vector, &a);
     ck_assert_int_eq(vector->size, 2);
+    o_vector_destroy(vector);
 }
 END_TEST
 
@@ -63,6 +66,7 @@ START_TEST(o_vector_reserve_test) {
     o_vector_push_back(vector, &a);
     ck_assert_int_eq(vector->size, 2);
     ck_assert(vector->capacity >= 2);
+    o_vector_destroy(vector);
 }
 END_TEST
 
