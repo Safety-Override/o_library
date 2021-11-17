@@ -35,6 +35,7 @@ void o_vector_push_back(o_vector_t* vec, void* data) {
         o_vector_reserve(vec, o_max(vec->capacity * 2, 1));
     }
     memcpy(((char*)vec->data) + vec->size * (vec->data_type_size), data, vec->data_type_size);
+    ++vec->size;
 }
 
 void o_vector_set(o_vector_t* vec, size_t index, void* data) {
