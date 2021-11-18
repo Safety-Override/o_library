@@ -36,8 +36,6 @@ void* o_vector_get(o_vector_t* vec, size_t index);
 
 void o_vector_pop_back(o_vector_t* vec);
 
-void o_vector_reserve(o_vector_t* vec, size_t new_capacity);
-
 void o_vector_destroy(o_vector_t* vec);
 
 void o_vector_push_back_array(o_vector_t* vec, void* data, size_t data_amount);

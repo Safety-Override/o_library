@@ -118,6 +118,23 @@ START_TEST(o_vector_pop_back_test) {
 }
 END_TEST
 
+START_TEST(o_vector_destroy_test) {
+    ck_assert_int_eq(0, 0);//hope it works.
+}
+END_TEST
+
+START_TEST(o_vector_push_back_array_test) {
+    o_vector_t* vector = o_vector_create(int);
+    int a[5] = {1, 2, 3, 4, 5};
+    o_vector_push_back_array(vector, a, 4);
+    ck_assert_int_eq(vector->size, 4);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 3), 4);
+    ck_assert(vector->capacity >= 4);
+
+    o_vector_destroy(vector);
+}
+END_TEST
+
 Suite* suite_zero(void)
 {
     Suite* s;
@@ -132,6 +149,8 @@ Suite* suite_zero(void)
     tcase_add_test(tc, o_vector_set_test);
     tcase_add_test(tc, o_vector_get_test);
     tcase_add_test(tc, o_vector_pop_back_test);
+    tcase_add_test(tc, o_vector_destroy_test);
+    tcase_add_test(tc, o_vector_push_back_array_test);
     suite_add_tcase(s, tc);
     return s;
 }
