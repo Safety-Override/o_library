@@ -30,7 +30,7 @@ size_t o_vector_size(o_vector_t* vec) {
     return vec->size;
 }
 
-void o_vector_push_back(o_vector_t* vec, void* data) {
+void o_vector_push_back(o_vector_t* vec, const void* data) {
     if (o_unlikely(vec->size == vec->capacity)) {
         o_vector_reserve(vec, o_max(vec->capacity * 2, 1));
     }
@@ -38,7 +38,7 @@ void o_vector_push_back(o_vector_t* vec, void* data) {
     ++vec->size;
 }
 
-void o_vector_set(o_vector_t* vec, size_t index, void* data) {
+void o_vector_set(o_vector_t* vec, size_t index, const void* data) {
     memcpy(((char*)vec->data) + index * (vec->data_type_size), data, vec->data_type_size);
 }
 
@@ -70,7 +70,7 @@ void o_vector_destroy(o_vector_t* vec) {
     free(vec);
 }
 
-void o_vector_push_back_array(o_vector_t* vec, void* data, size_t data_amount) {
+void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amount) {
     if (vec->capacity < data_amount + vec->size) {
         o_vector_reserve(vec, next_pow2(data_amount + vec->size));
     }
@@ -105,7 +105,7 @@ void o_vector_swap(o_vector_t* first_vec, o_vector_t* second_vec) {
     o_swap(*first_vec, *second_vec);
 }
 
-void o_vector_insert(o_vector_t* vec, void* data, size_t index) {
+void o_vector_insert(o_vector_t* vec, const void* data, size_t index) {
     if (o_unlikely(vec->size == vec->capacity)) {
         o_vector_reserve(vec, o_max(vec->capacity * 2, 1));
     }
@@ -125,7 +125,7 @@ o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node) 
     return (void*)((char*)node + vec->data_type_size);
 }
 
-void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, void* data) {
+void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, const void* data) {
     memcpy(node->data, data, vec->data_type_size);
 }
 
