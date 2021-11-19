@@ -445,8 +445,8 @@ int main(void)
 {
     int number_failed;
     SRunner* sr;
-    Suite* s_zero = suite_vector();
-    sr = srunner_create(s_zero);
+    Suite* s_vector = suite_vector();
+    sr = srunner_create(s_vector);
     srunner_run_all(sr, CK_NORMAL);
     number_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
