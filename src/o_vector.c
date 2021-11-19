@@ -115,10 +115,8 @@ void o_vector_insert(o_vector_t* vec, const void* data, size_t index) {
 }
 
 void o_vector_erase(o_vector_t* vec, size_t index) {
-    if (o_likely(vec->size > 0)) {
-        memmove((char*)vec->data + vec->data_type_size * index, (char*)vec->data + vec->data_type_size * (index + 1), (vec->size - index - 1) * vec->data_type_size);
-        --vec->size;
-    }
+    memmove((char*)vec->data + vec->data_type_size * index, (char*)vec->data + vec->data_type_size * (index + 1), (vec->size - index - 1) * vec->data_type_size);
+    --vec->size;
 }
 
 o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node) {
