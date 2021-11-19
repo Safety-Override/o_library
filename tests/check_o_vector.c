@@ -221,6 +221,44 @@ START_TEST(o_vector_clear_test) {
 }
 END_TEST
 
+START_TEST(o_vector_swap_test) {
+    o_vector_t* vector_one = o_vector_create(int);
+    o_vector_t* vector_two = o_vector_create(int);
+    int a = 31111;
+    int b = 5;
+    o_vector_reserve(vector_one, 2);
+    o_vector_push_back(vector_one, &a);
+    o_vector_push_back(vector_one, &a);
+    o_vector_push_back(vector_one, &a);
+    o_vector_push_back(vector_one, &a);
+    o_vector_push_back(vector_two, &b);
+    o_vector_push_back(vector_two, &b);
+    void* first_data_array = vector_one->data;
+    void* second_data_array = vector_two->data;
+    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 3), a);
+    ck_assert_int_eq(o_vector_size(vector_one), 4);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 1), b);
+    ck_assert_int_eq(o_vector_size(vector_two), 2);
+    ck_assert_int_eq(o_vector_capacity(vector_one), 4);
+    ck_assert_int_eq(o_vector_capacity(vector_two), 2);
+    o_vector_swap(vector_one, vector_two);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 3), a);
+    ck_assert_int_eq(o_vector_size(vector_two), 4);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 1), b);
+    ck_assert_int_eq(o_vector_size(vector_one), 2);
+    ck_assert_int_eq(o_vector_capacity(vector_one), 2);
+    ck_assert_int_eq(o_vector_capacity(vector_two), 4);
+    o_vector_push_back(vector_one, &b);
+    o_vector_push_back(vector_one, &b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 3), b);
+    ck_assert_int_eq(o_vector_size(vector_one), 4);
+    ck_assert(o_vector_begin(vector_two) == first_data_array);
+    ck_assert(o_vector_begin(vector_one) == second_data_array);
+    o_vector_destroy(vector_one);
+    o_vector_destroy(vector_two);
+}
+END_TEST
+
 Suite* suite_zero(void)
 {
     Suite* s;
@@ -242,6 +280,7 @@ Suite* suite_zero(void)
     tcase_add_test(tc, o_vector_empty_test);
     tcase_add_test(tc, o_vector_capacity_test);
     tcase_add_test(tc, o_vector_clear_test);
+    tcase_add_test(tc, o_vector_swap_test);
     suite_add_tcase(s, tc);
     return s;
 }

@@ -48,7 +48,7 @@ bool o_vector_empty(o_vector_t* vec);
 
 size_t o_vector_capacity(o_vector_t* vec);
 
-bool o_vector_clear(o_vector_t* vec);
+void o_vector_clear(o_vector_t* vec);
 
 void o_vector_swap(o_vector_t* first_vec, o_vector_t* second_vec);
 

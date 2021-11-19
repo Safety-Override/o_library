@@ -94,18 +94,15 @@ size_t o_vector_capacity(o_vector_t* vec) {
     return vec->capacity;
 }
 
-bool o_vector_clear(o_vector_t* vec) {
+void o_vector_clear(o_vector_t* vec) {
     free(vec->data);
     vec->capacity = 0;
     vec->size = 0;
     vec->data = NULL;
 }
 
-void o_vector_swap(o_vector_t* vec1, o_vector_t* vec2) {
-    o_swap(vec1->size, vec2->size);
-    o_swap(vec1->data_type_size, vec2->data_type_size);
-    o_swap(vec1->data, vec2->data);
-    o_swap(vec1->capacity, vec2->capacity);
+void o_vector_swap(o_vector_t* first_vec, o_vector_t* second_vec) {
+    o_swap(*first_vec, *second_vec);
 }
 
 void o_vector_insert(o_vector_t* vec, void* data, size_t index) {
