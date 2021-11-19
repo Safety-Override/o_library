@@ -124,7 +124,7 @@ START_TEST(o_vector_pop_back_test) {
 END_TEST
 
 START_TEST(o_vector_destroy_test) {
-    ck_assert_int_eq(0, 0);//hope it just works.
+    ck_assert_int_eq(0, 0); //hope it just works.
 }
 END_TEST
 
@@ -259,6 +259,44 @@ START_TEST(o_vector_swap_test) {
 }
 END_TEST
 
+START_TEST(o_vector_insert_test) {
+    o_vector_t* vector = o_vector_create(int);
+    int a = 31111;
+    int b = 5;
+    o_vector_insert(vector, &a, 0);
+    ck_assert_int_eq(vector->size, 1);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
+    o_vector_insert(vector, &b, 0);
+    ck_assert_int_eq(vector->size, 2);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), a);
+    o_vector_insert(vector, &a, 0);
+    ck_assert_int_eq(vector->size, 3);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 2), a);
+    o_vector_insert(vector, &b, 1);
+    ck_assert_int_eq(vector->size, 4);
+    ck_assert(vector->capacity >= 4);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 2), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 3), a);
+    o_vector_insert(vector, &a, 4);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 2), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 3), a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 4), a);
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(o_vector_erase_test) {
+    //to do
+}
+END_TEST
+
 Suite* suite_zero(void)
 {
     Suite* s;
@@ -281,6 +319,8 @@ Suite* suite_zero(void)
     tcase_add_test(tc, o_vector_capacity_test);
     tcase_add_test(tc, o_vector_clear_test);
     tcase_add_test(tc, o_vector_swap_test);
+    tcase_add_test(tc, o_vector_insert_test);
+    tcase_add_test(tc, o_vector_erase_test);
     suite_add_tcase(s, tc);
     return s;
 }
