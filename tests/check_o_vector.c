@@ -168,9 +168,13 @@ START_TEST(o_vector_empty_test) {
     o_vector_t* vector = o_vector_create(int);
     int a = 31111;
     int b = 0;
+    ck_assert(o_vector_empty(vector) == true);
     o_vector_push_back(vector, &b);
+    ck_assert(o_vector_empty(vector) == false);
     o_vector_push_back(vector, &b);
+    ck_assert(o_vector_empty(vector) == false);
     o_vector_pop_back(vector);
+    ck_assert(o_vector_empty(vector) == false);
     o_vector_pop_back(vector);
     ck_assert(o_vector_empty(vector) == true);
     ck_assert(vector->size == 0);
