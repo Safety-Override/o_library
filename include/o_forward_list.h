@@ -31,8 +31,6 @@ void o_forward_list_destroy(o_forward_list_t* list);
 
 void o_forward_list_clear(o_forward_list_t* list);
 
-size_t o_forward_list_get_type_size(o_forward_list_t* list);
-
 void o_forward_list_swap(o_forward_list_t* first_list, o_forward_list_t* second_list);
 
 void o_forward_list_resize(o_forward_list_t* list, size_t new_size);

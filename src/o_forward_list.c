@@ -56,10 +56,6 @@ void o_forward_list_clear(o_forward_list_t* list) {
     }
 }
 
-size_t o_forward_list_get_type_size(o_forward_list_t* list) {
-    return list->data_type_size;
-}
-
 void o_forward_list_swap(o_forward_list_t* first_list, o_forward_list_t* second_list) {
     o_swap(*first_list, *second_list);
 }

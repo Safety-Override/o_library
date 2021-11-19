@@ -19,10 +19,10 @@ o_vector_t* o_vector_create_t(size_t data_type_size);
     o_vector_create_t(sizeof(T)); \
 })
 
-#define o_vector_for_each(vector, entry)          \
-        for(void* entry = o_vector_begin(vector); \
-            entry != o_vector_end(vector);        \
-            entry = (char*)entry + o_vector_get_type_size(vector))
+#define o_vector_for_each(vector, entry)                     \
+        for(o_vector_node_t* entry = o_vector_begin(vector); \
+            entry != o_vector_end(vector);                   \
+            entry = o_vector_node_get_next(vector, entry))
 
 size_t o_vector_size(o_vector_t* vec);
 
@@ -55,8 +55,6 @@ void o_vector_swap(o_vector_t* first_vec, o_vector_t* second_vec);
 void o_vector_insert(o_vector_t* vec, void* data, size_t index);
 
 void o_vector_erase(o_vector_t* vec, size_t index);
-
-size_t o_vector_get_type_size(o_vector_t* vec);
 
 o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node);
 

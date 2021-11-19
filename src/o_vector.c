@@ -121,10 +121,6 @@ void o_vector_erase(o_vector_t* vec, size_t index) {
     }
 }
 
-size_t o_vector_get_type_size(o_vector_t* vec) {
-    return vec->data_type_size;
-}
-
 o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node) {
     return (void*)((char*)node + vec->data_type_size);
 }
