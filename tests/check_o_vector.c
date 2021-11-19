@@ -5,6 +5,7 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+#include <stdlib.h>
 #include <check.h>
 #include <o_vector.h>
 #include <o_vector_private.h>
@@ -162,7 +163,6 @@ START_TEST(push_back_array_test) {
 }
 END_TEST
 
-
 START_TEST(empty_test) {
     o_vector_t* vector = o_vector_create(int);
     int a = 31111;
@@ -209,14 +209,14 @@ START_TEST(capacity_test) {
     ck_assert_int_eq(o_vector_capacity(vector), 0);
     int a = 31111;
     o_vector_reserve(vector, 2);
-    ck_assert_int_eq(o_vector_capacity(vector), 2);
+    ck_assert_uint_eq(o_vector_capacity(vector), 2U);
     o_vector_push_back(vector, &a);
-    ck_assert_int_eq(o_vector_capacity(vector), 2);
+    ck_assert_uint_eq(o_vector_capacity(vector), 2U);
     o_vector_push_back(vector, &a);
     o_vector_push_back(vector, &a);
     o_vector_push_back(vector, &a);
-    ck_assert(o_vector_capacity(vector) >= 2);
-    ck_assert_int_eq(o_vector_capacity(vector), vector->capacity);
+    ck_assert_uint_eq(o_vector_capacity(vector), 4U);
+    ck_assert_uint_eq(o_vector_capacity(vector), vector->capacity);
     o_vector_destroy(vector);
 }
 END_TEST
@@ -225,57 +225,63 @@ START_TEST(clear_test) {
     o_vector_t* vector = o_vector_create(int);
     ck_assert_int_eq(o_vector_capacity(vector), 0);
     int a = 31111;
-    int b = 5;
+    const int b = 5;
     o_vector_reserve(vector, 2);
     o_vector_push_back(vector, &a);
     o_vector_push_back(vector, &a);
     o_vector_push_back(vector, &a);
     o_vector_push_back(vector, &a);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 3), a);
-    ck_assert(vector->capacity >= 4);
+    ck_assert_uint_eq(o_vector_capacity(vector), 4U);
     o_vector_clear(vector);
+    ck_assert_uint_eq(o_vector_size(vector), 0U);
+    ck_assert_uint_eq(o_vector_capacity(vector), 0U);
+    ck_assert(vector->data == NULL);
     o_vector_push_back(vector, &b);
     o_vector_push_back(vector, &b);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
-    ck_assert(vector->capacity >= 2 && vector->capacity < 4);
-    ck_assert_int_eq(vector->size, 2);
+    ck_assert_uint_eq(o_vector_capacity(vector), 2U);
+    ck_assert_uint_eq(o_vector_size(vector), 2U);
     o_vector_destroy(vector);
 }
 END_TEST
 
 START_TEST(swap_test) {
-    o_vector_t* vector_one = o_vector_create(int);
-    o_vector_t* vector_two = o_vector_create(int);
     int a = 31111;
     int b = 5;
-    o_vector_reserve(vector_one, 2);
+    o_vector_t* vector_one = o_vector_create(int);
     o_vector_push_back(vector_one, &a);
     o_vector_push_back(vector_one, &a);
     o_vector_push_back(vector_one, &a);
     o_vector_push_back(vector_one, &a);
+    o_vector_t* vector_two = o_vector_create(int);
     o_vector_push_back(vector_two, &b);
     o_vector_push_back(vector_two, &b);
     void* first_data_array = vector_one->data;
     void* second_data_array = vector_two->data;
-    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 3), a);
-    ck_assert_int_eq(o_vector_size(vector_one), 4);
-    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 1), b);
-    ck_assert_int_eq(o_vector_size(vector_two), 2);
-    ck_assert_int_eq(o_vector_capacity(vector_one), 4);
-    ck_assert_int_eq(o_vector_capacity(vector_two), 2);
     o_vector_swap(vector_one, vector_two);
-    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 3), a);
-    ck_assert_int_eq(o_vector_size(vector_two), 4);
-    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 1), b);
-    ck_assert_int_eq(o_vector_size(vector_one), 2);
-    ck_assert_int_eq(o_vector_capacity(vector_one), 2);
-    ck_assert_int_eq(o_vector_capacity(vector_two), 4);
-    o_vector_push_back(vector_one, &b);
-    o_vector_push_back(vector_one, &b);
-    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 3), b);
-    ck_assert_int_eq(o_vector_size(vector_one), 4);
-    ck_assert(o_vector_begin(vector_two) == first_data_array);
+
+    // check first vector
     ck_assert(o_vector_begin(vector_one) == second_data_array);
+    ck_assert_uint_eq(o_vector_capacity(vector_one), 2U);
+    ck_assert_uint_eq(o_vector_size(vector_one), 2U);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 0), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 1), b);
+    // check second vector
+    ck_assert(o_vector_begin(vector_two) == first_data_array);
+    ck_assert_uint_eq(o_vector_capacity(vector_two), 4U);
+    ck_assert_uint_eq(o_vector_size(vector_two), 4U);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 0), a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 1), a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 2), a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_two, 3), a);
+
+    o_vector_push_back(vector_one, &b);
+    o_vector_push_back(vector_one, &b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 2), b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector_one, 3), b);
+    ck_assert_uint_eq(o_vector_size(vector_one), 4U);
+
     o_vector_destroy(vector_one);
     o_vector_destroy(vector_two);
 }
@@ -286,25 +292,30 @@ START_TEST(insert_test) {
     int a = 31111;
     int b = 5;
     o_vector_insert(vector, &a, 0);
-    ck_assert_int_eq(vector->size, 1);
+    ck_assert_uint_eq(o_vector_size(vector), 1U);
+    ck_assert_uint_eq(o_vector_capacity(vector), 1U);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
     o_vector_insert(vector, &b, 0);
-    ck_assert_int_eq(vector->size, 2);
+    ck_assert_uint_eq(o_vector_size(vector), 2U);
+    ck_assert_uint_eq(o_vector_capacity(vector), 2U);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 0), b);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 1), a);
     o_vector_insert(vector, &a, 0);
-    ck_assert_int_eq(vector->size, 3);
+    ck_assert_uint_eq(o_vector_size(vector), 3U);
+    ck_assert_uint_eq(o_vector_capacity(vector), 4U);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 2), a);
     o_vector_insert(vector, &b, 1);
-    ck_assert_int_eq(vector->size, 4);
-    ck_assert(vector->capacity >= 4);
+    ck_assert_uint_eq(o_vector_size(vector), 4U);
+    ck_assert_uint_eq(o_vector_capacity(vector), 4U);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 2), b);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 3), a);
     o_vector_insert(vector, &a, 4);
+    ck_assert_uint_eq(o_vector_size(vector), 5U);
+    ck_assert_uint_eq(o_vector_capacity(vector), 8U);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 0), a);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 2), b);
@@ -315,7 +326,68 @@ START_TEST(insert_test) {
 END_TEST
 
 START_TEST(erase_test) {
-    // TODO
+    o_vector_t* vector = o_vector_create(int);
+    int arr[5] = {1, 2, 3, 4, 5};
+    o_vector_push_back_array(vector, arr, 5);
+    ck_assert_uint_eq(o_vector_size(vector), 5U);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), arr[0]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), arr[1]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 2), arr[2]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 3), arr[3]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 4), arr[4]);
+    o_vector_erase(vector, 2);
+    ck_assert_uint_eq(o_vector_size(vector), 4U);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), arr[0]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), arr[1]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 2), arr[3]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 3), arr[4]);
+    o_vector_erase(vector, 3);
+    ck_assert_uint_eq(o_vector_size(vector), 3U);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), arr[0]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), arr[1]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 2), arr[3]);
+    o_vector_erase(vector, 0);
+    ck_assert_uint_eq(o_vector_size(vector), 2U);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 0), arr[1]);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), arr[3]);
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(node_get_next_test) {
+    o_vector_t* vector = o_vector_create(short);
+    int a[5] = {1, 2, 3, 4, 5};
+    o_vector_push_back_array(vector, a, 5);
+    o_vector_node_t* node = o_vector_begin(vector);
+    ck_assert(node == vector->data);
+    node = o_vector_node_get_next(vector, node);
+    ck_assert(node == (void*)((char*)vector->data + sizeof(short)));
+    node = o_vector_node_get_next(vector, node);
+    ck_assert(node == (void*)((char*)vector->data + 2 * sizeof(short)));
+    node = o_vector_node_get_next(vector, node);
+    ck_assert(node == (void*)((char*)vector->data + 3 * sizeof(short)));
+    node = o_vector_node_get_next(vector, node);
+    ck_assert(node == (void*)((char*)vector->data + 4 * sizeof(short)));
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(node_set_and_get_value_test) {
+    o_vector_t* vector = o_vector_create(short);
+    short a[5] = {1, 2, 3, 4, 5};
+    o_vector_push_back_array(vector, a, 5);
+    o_vector_node_t* node = o_vector_begin(vector);
+    for (size_t i = 0; i < 5; ++i) {
+        ck_assert_int_eq(a[i], *(short*)o_vector_node_get_value(vector, node));
+        node = o_vector_node_get_next(vector, node);
+    }
+    ck_assert(node == o_vector_end(vector));
+    node = o_vector_begin(vector);
+    node = o_vector_node_get_next(vector, node);
+    short val = 123;
+    o_vector_node_set_value(vector, node, &val);
+    ck_assert_int_eq(123, *(short*)o_vector_node_get_value(vector, node));
+    o_vector_destroy(vector);
 }
 END_TEST
 
@@ -337,29 +409,33 @@ START_TEST(for_each_test) {
 }
 END_TEST
 
-Suite* suite_zero(void)
+Suite* suite_vector(void)
 {
     Suite* s;
     TCase* tc;
     s = suite_create("o_vector workability tests");
     tc = tcase_create("o_vector basic usage check");
     tcase_add_test(tc, create_test);
-    tcase_add_test(tc, reserve_test);
-    tcase_add_test(tc, size_test);
-    tcase_add_test(tc, push_back_test);
-    tcase_add_test(tc, set_test);
-    tcase_add_test(tc, get_test);
-    tcase_add_test(tc, pop_back_test);
     tcase_add_test(tc, destroy_test);
+    tcase_add_test(tc, reserve_test);
+    tcase_add_test(tc, push_back_test);
+    tcase_add_test(tc, pop_back_test);
+    tcase_add_test(tc, reserve_and_push_back_test);
+    tcase_add_test(tc, size_test);
+    tcase_add_test(tc, resize_test);
+    tcase_add_test(tc, get_test);
+    tcase_add_test(tc, set_test);
     tcase_add_test(tc, push_back_array_test);
+    tcase_add_test(tc, empty_test);
     tcase_add_test(tc, begin_test);
     tcase_add_test(tc, end_test);
-    tcase_add_test(tc, empty_test);
     tcase_add_test(tc, capacity_test);
     tcase_add_test(tc, clear_test);
     tcase_add_test(tc, swap_test);
     tcase_add_test(tc, insert_test);
     tcase_add_test(tc, erase_test);
+    tcase_add_test(tc, node_get_next_test);
+    tcase_add_test(tc, node_set_and_get_value_test);
     tcase_add_test(tc, for_each_test);
     suite_add_tcase(s, tc);
     return s;
@@ -369,13 +445,10 @@ int main(void)
 {
     int number_failed;
     SRunner* sr;
-
-    Suite* s_zero = suite_zero();
-
+    Suite* s_zero = suite_vector();
     sr = srunner_create(s_zero);
-
     srunner_run_all(sr, CK_NORMAL);
     number_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
-    return (number_failed == 0) ? 0 : 1;
+    return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
