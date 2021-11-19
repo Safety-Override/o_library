@@ -22,11 +22,11 @@ START_TEST(o_vector_for_each_test) {
     o_vector_t* vector = o_vector_create(int);
     int a[5] = {1, 2, 3, 4, 5};
     int b[5] = {5, 6, 7, 8, 9};
-    o_vector_push_back(vector, &a);
-    o_vector_push_back(vector, &a);
-    o_vector_push_back(vector, &a);
-    o_vector_push_back(vector, &a);
-    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &a[0]);
+    o_vector_push_back(vector, &a[1]);
+    o_vector_push_back(vector, &a[2]);
+    o_vector_push_back(vector, &a[3]);
+    o_vector_push_back(vector, &a[4]);
     o_vector_node_t* node;
     int i = 0;
     int temp;
@@ -34,9 +34,10 @@ START_TEST(o_vector_for_each_test) {
         temp = 4 + a[i++];
         o_vector_node_set_value(vector, node, &temp);
     }
-    i = 0;
-    o_vector_for_each(vector, node) {
-        ck_assert_int_eq(b[i++], *(int*)o_vector_node_get_value(vector, node));
+    void* current_node = vector->data;
+    for (int j = 0; j < 5; ++j) {
+        ck_assert_int_eq(b[j], *(int*)current_node);
+        current_node += vector->data_type_size;
     }
     o_vector_destroy(vector);
 }
@@ -44,12 +45,12 @@ END_TEST
 
 START_TEST(o_vector_size_test) {
     o_vector_t* vector = o_vector_create(int);
-    ck_assert_int_eq(vector->size, 0);
+    ck_assert_int_eq(o_vector_size(vector), 0);
     int a = 31111;
     o_vector_push_back(vector, &a);
-    ck_assert_int_eq(vector->size, 1);
+    ck_assert_int_eq(o_vector_size(vector), 1);
     o_vector_push_back(vector, &a);
-    ck_assert_int_eq(vector->size, 2);
+    ck_assert_int_eq(o_vector_size(vector), 2);
     o_vector_destroy(vector);
 }
 END_TEST
@@ -89,7 +90,7 @@ START_TEST(o_vector_set_test) {
     o_vector_push_back(vector, &b);
     o_vector_push_back(vector, &b);
     o_vector_set(vector, 1, &a);
-    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), a);
+    ck_assert_int_eq(*(int*)((char*)vector->data + sizeof(int)), a);
     o_vector_destroy(vector);
 }
 END_TEST
@@ -119,7 +120,7 @@ START_TEST(o_vector_pop_back_test) {
 END_TEST
 
 START_TEST(o_vector_destroy_test) {
-    ck_assert_int_eq(0, 0);//hope it works.
+    ck_assert_int_eq(0, 0);//hope it just works.
 }
 END_TEST
 
@@ -147,6 +148,71 @@ START_TEST(o_vector_begin_test) {
 }
 END_TEST
 
+START_TEST(o_vector_end_test) {
+    o_vector_t* vector = o_vector_create(int);
+    int a = 31111;
+    int b = 0;
+    o_vector_push_back(vector, &b);
+    o_vector_push_back(vector, &b);
+    o_vector_set(vector, 1, &a);
+    ck_assert(o_vector_end(vector) == (void*)((char*)vector->data + sizeof(int) * 2));
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(o_vector_empty_test) {
+    o_vector_t* vector = o_vector_create(int);
+    int a = 31111;
+    int b = 0;
+    o_vector_push_back(vector, &b);
+    o_vector_push_back(vector, &b);
+    o_vector_pop_back(vector);
+    o_vector_pop_back(vector);
+    ck_assert(o_vector_empty(vector) == true);
+    ck_assert(vector->size == 0);
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(o_vector_capacity_test) {
+    o_vector_t* vector = o_vector_create(int);
+    ck_assert_int_eq(o_vector_capacity(vector), 0);
+    int a = 31111;
+    o_vector_reserve(vector, 2);
+    ck_assert_int_eq(o_vector_capacity(vector), 2);
+    o_vector_push_back(vector, &a);
+    ck_assert_int_eq(o_vector_capacity(vector), 2);
+    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &a);
+    ck_assert(o_vector_capacity(vector) >= 2);
+    ck_assert_int_eq(o_vector_capacity(vector), vector->capacity);
+    o_vector_destroy(vector);
+}
+END_TEST
+
+START_TEST(o_vector_clear_test) {
+    o_vector_t* vector = o_vector_create(int);
+    ck_assert_int_eq(o_vector_capacity(vector), 0);
+    int a = 31111;
+    int b = 5;
+    o_vector_reserve(vector, 2);
+    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &a);
+    o_vector_push_back(vector, &a);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 3), a);
+    ck_assert(vector->capacity >= 4);
+    o_vector_clear(vector);
+    o_vector_push_back(vector, &b);
+    o_vector_push_back(vector, &b);
+    ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
+    ck_assert(vector->capacity >= 2 && vector->capacity < 4);
+    ck_assert_int_eq(vector->size, 2);
+    o_vector_destroy(vector);
+}
+END_TEST
+
 Suite* suite_zero(void)
 {
     Suite* s;
@@ -164,6 +230,10 @@ Suite* suite_zero(void)
     tcase_add_test(tc, o_vector_destroy_test);
     tcase_add_test(tc, o_vector_push_back_array_test);
     tcase_add_test(tc, o_vector_begin_test);
+    tcase_add_test(tc, o_vector_end_test);
+    tcase_add_test(tc, o_vector_empty_test);
+    tcase_add_test(tc, o_vector_capacity_test);
+    tcase_add_test(tc, o_vector_clear_test);
     suite_add_tcase(s, tc);
     return s;
 }

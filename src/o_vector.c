@@ -98,6 +98,7 @@ bool o_vector_clear(o_vector_t* vec) {
     free(vec->data);
     vec->capacity = 0;
     vec->size = 0;
+    vec->data = NULL;
 }
 
 void o_vector_swap(o_vector_t* vec1, o_vector_t* vec2) {
