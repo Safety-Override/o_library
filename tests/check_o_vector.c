@@ -34,10 +34,10 @@ START_TEST(o_vector_for_each_test) {
         temp = 4 + a[i++];
         o_vector_node_set_value(vector, node, &temp);
     }
-    void* current_node = vector->data;
+    o_vector_node_t* current_node = o_vector_begin(vector);
     for (int j = 0; j < 5; ++j) {
         ck_assert_int_eq(b[j], *(int*)current_node);
-        current_node += vector->data_type_size;
+        current_node = o_vector_node_get_next(vector, current_node);
     }
     o_vector_destroy(vector);
 }
@@ -51,6 +51,10 @@ START_TEST(o_vector_size_test) {
     ck_assert_int_eq(o_vector_size(vector), 1);
     o_vector_push_back(vector, &a);
     ck_assert_int_eq(o_vector_size(vector), 2);
+    o_vector_pop_back(vector);
+    ck_assert_int_eq(o_vector_size(vector), 1);
+    o_vector_pop_back(vector);
+    ck_assert_int_eq(o_vector_size(vector), 0);
     o_vector_destroy(vector);
 }
 END_TEST
