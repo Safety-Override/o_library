@@ -127,6 +127,6 @@ void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, const void*
     memcpy(node->data, data, vec->data_type_size);
 }
 
-void* o_vector_node_get_value(const o_vector_t* vec, const o_vector_node_t* node) {
+void* o_vector_node_get_value(const o_vector_t* vec, o_vector_node_t* node) {
     return node->data;
 }

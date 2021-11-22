@@ -62,4 +62,4 @@ o_vector_node_t* o_vector_node_get_next(const o_vector_t* vec, const o_vector_no
 
 void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, const void* data);
 
-void* o_vector_node_get_value(const o_vector_t* vec, const o_vector_node_t* node);
+void* o_vector_node_get_value(const o_vector_t* vec, o_vector_node_t* node);
