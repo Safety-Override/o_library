@@ -187,7 +187,7 @@ START_TEST(begin_test) {
     o_vector_push_back(vector, &b);
     o_vector_push_back(vector, &b);
     o_vector_set(vector, 1, &a);
-    ck_assert(o_vector_begin(vector) == vector->data);
+    ck_assert_ptr_eq(o_vector_begin(vector), vector->data);
     o_vector_destroy(vector);
 }
 END_TEST
@@ -199,7 +199,7 @@ START_TEST(end_test) {
     o_vector_push_back(vector, &b);
     o_vector_push_back(vector, &b);
     o_vector_set(vector, 1, &a);
-    ck_assert(o_vector_end(vector) == (void*)((char*)vector->data + sizeof(int) * 2));
+    ck_assert_ptr_eq(o_vector_end(vector), (void*)((char*)vector->data + sizeof(int) * 2));
     o_vector_destroy(vector);
 }
 END_TEST
@@ -236,7 +236,7 @@ START_TEST(clear_test) {
     o_vector_clear(vector);
     ck_assert_uint_eq(o_vector_size(vector), 0U);
     ck_assert_uint_eq(o_vector_capacity(vector), 0U);
-    ck_assert(vector->data == NULL);
+    ck_assert_ptr_eq(vector->data, NULL);
     o_vector_push_back(vector, &b);
     o_vector_push_back(vector, &b);
     ck_assert_int_eq(*(int*)o_vector_get(vector, 1), b);
@@ -262,13 +262,13 @@ START_TEST(swap_test) {
     o_vector_swap(vector_one, vector_two);
 
     // check first vector
-    ck_assert(o_vector_begin(vector_one) == second_data_array);
+    ck_assert_ptr_eq(o_vector_begin(vector_one), second_data_array);
     ck_assert_uint_eq(o_vector_capacity(vector_one), 2U);
     ck_assert_uint_eq(o_vector_size(vector_one), 2U);
     ck_assert_int_eq(*(int*)o_vector_get(vector_one, 0), b);
     ck_assert_int_eq(*(int*)o_vector_get(vector_one, 1), b);
     // check second vector
-    ck_assert(o_vector_begin(vector_two) == first_data_array);
+    ck_assert_ptr_eq(o_vector_begin(vector_two), first_data_array);
     ck_assert_uint_eq(o_vector_capacity(vector_two), 4U);
     ck_assert_uint_eq(o_vector_size(vector_two), 4U);
     ck_assert_int_eq(*(int*)o_vector_get(vector_two, 0), a);
@@ -359,15 +359,15 @@ START_TEST(node_get_next_test) {
     int a[5] = {1, 2, 3, 4, 5};
     o_vector_push_back_array(vector, a, 5);
     o_vector_node_t* node = o_vector_begin(vector);
-    ck_assert(node == vector->data);
+    ck_assert_ptr_eq(node, vector->data);
     node = o_vector_node_get_next(vector, node);
-    ck_assert(node == (void*)((char*)vector->data + sizeof(short)));
+    ck_assert_ptr_eq(node, (void*)((char*)vector->data + sizeof(short)));
     node = o_vector_node_get_next(vector, node);
-    ck_assert(node == (void*)((char*)vector->data + 2 * sizeof(short)));
+    ck_assert_ptr_eq(node, (void*)((char*)vector->data + 2 * sizeof(short)));
     node = o_vector_node_get_next(vector, node);
-    ck_assert(node == (void*)((char*)vector->data + 3 * sizeof(short)));
+    ck_assert_ptr_eq(node, (void*)((char*)vector->data + 3 * sizeof(short)));
     node = o_vector_node_get_next(vector, node);
-    ck_assert(node == (void*)((char*)vector->data + 4 * sizeof(short)));
+    ck_assert_ptr_eq(node, (void*)((char*)vector->data + 4 * sizeof(short)));
     o_vector_destroy(vector);
 }
 END_TEST
@@ -381,7 +381,7 @@ START_TEST(node_set_and_get_value_test) {
         ck_assert_int_eq(a[i], *(short*)o_vector_node_get_value(vector, node));
         node = o_vector_node_get_next(vector, node);
     }
-    ck_assert(node == o_vector_end(vector));
+    ck_assert_ptr_eq(node, o_vector_end(vector));
     node = o_vector_begin(vector);
     node = o_vector_node_get_next(vector, node);
     short val = 123;

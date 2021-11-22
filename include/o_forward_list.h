@@ -14,8 +14,8 @@ typedef struct o_forward_list_s o_forward_list_t;
 typedef struct o_forward_list_node_s o_forward_list_node_t;
 
 o_forward_list_t* o_forward_list_create_t(size_t data_type_size);
-#define o_list_create(T)        \
-({                              \
+#define o_forward_list_create(T)        \
+({                                      \
     o_forward_list_create_t(sizeof(T)); \
 })
 
@@ -51,4 +51,4 @@ o_forward_list_node_t* o_forward_list_node_get_next(const o_forward_list_t* list
 
 void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, const void* data);
 
-void* o_forward_list_node_get_value(const o_forward_list_t* list, o_forward_list_node_t* node);
+void* o_forward_list_node_get_value(const o_forward_list_t* list, const o_forward_list_node_t* node);
