@@ -68,6 +68,7 @@ void o_forward_list_resize(o_forward_list_t* list, size_t new_size) {
             memset(null_value, 0, list->data_type_size);
             o_forward_list_node_insert_after(list, current_node, null_value);
         }
+        current_node = o_forward_list_node_get_next(list, current_node);
     }
     while (o_forward_list_node_get_next(list, current_node) != o_forward_list_end(list)) {
         o_forward_list_node_erase_after(list, current_node);
@@ -118,6 +119,6 @@ void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t
     memcpy(node->data, data, list->data_type_size);
 }
 
-void* o_forward_list_node_get_value(const o_forward_list_t* list, const o_forward_list_node_t* node) {
+void* o_forward_list_node_get_value(const o_forward_list_t* list, o_forward_list_node_t* node) {
     return node->data;
 }
