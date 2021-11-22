@@ -24,7 +24,7 @@ o_vector_t* o_vector_create_t(size_t data_type_size);
             entry != o_vector_end(vector);                   \
             entry = o_vector_node_get_next(vector, entry))
 
-size_t o_vector_size(o_vector_t* vec);
+size_t o_vector_size(const o_vector_t* vec);
 
 void o_vector_resize(o_vector_t* vec, size_t new_size);
 
@@ -34,7 +34,7 @@ void o_vector_push_back(o_vector_t* vec, const void* data);
 
 void o_vector_set(o_vector_t* vec, size_t index, const void* data);
 
-void* o_vector_get(o_vector_t* vec, size_t index);
+void* o_vector_get(const o_vector_t* vec, size_t index);
 
 void o_vector_pop_back(o_vector_t* vec);
 
@@ -42,13 +42,13 @@ void o_vector_destroy(o_vector_t* vec);
 
 void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amount);
 
-o_vector_node_t* o_vector_begin(o_vector_t* vec);
+o_vector_node_t* o_vector_begin(const o_vector_t* vec);
 
-o_vector_node_t* o_vector_end(o_vector_t* vec);
+o_vector_node_t* o_vector_end(const o_vector_t* vec);
 
-bool o_vector_empty(o_vector_t* vec);
+bool o_vector_empty(const o_vector_t* vec);
 
-size_t o_vector_capacity(o_vector_t* vec);
+size_t o_vector_capacity(const o_vector_t* vec);
 
 void o_vector_clear(o_vector_t* vec);
 
@@ -58,8 +58,8 @@ void o_vector_insert(o_vector_t* vec, const void* data, size_t index);
 
 void o_vector_erase(o_vector_t* vec, size_t index);
 
-o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node);
+o_vector_node_t* o_vector_node_get_next(const o_vector_t* vec, const o_vector_node_t* node);
 
 void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, const void* data);
 
-void* o_vector_node_get_value(o_vector_t* vec, o_vector_node_t* node);
+void* o_vector_node_get_value(const o_vector_t* vec, const o_vector_node_t* node);
