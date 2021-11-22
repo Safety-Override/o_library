@@ -260,7 +260,7 @@ START_TEST(swap_test) {
     void* first_data_array = vector_one->data;
     void* second_data_array = vector_two->data;
     o_vector_swap(vector_one, vector_two);
-
+    ck_assert_uint_eq(vector_one->data_type_size, vector_two->data_type_size);
     // check first vector
     ck_assert_ptr_eq(o_vector_begin(vector_one), second_data_array);
     ck_assert_uint_eq(o_vector_capacity(vector_one), 2U);
