@@ -158,6 +158,49 @@ START_TEST(resize_test) {
         list_data_node = o_forward_list_node_get_next(list, list_data_node);
     }
     ck_assert_ptr_eq(list_data_node, NULL);
+    list_data_node = list->front;
+    o_forward_list_resize(list, 5U);
+    for (size_t i = 0; i < 5U; ++i) {  
+        ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list, list_data_node), 0);
+        list_data_node = o_forward_list_node_get_next(list, list_data_node);
+    }
+    ck_assert_ptr_eq(list_data_node, NULL);
+    o_forward_list_destroy(list);
+}
+END_TEST
+
+START_TEST(before_begin_test) {
+    o_forward_list_t* list = o_forward_list_create(long long);
+    long long a = 31111;
+    long long b = 0;
+    o_forward_list_push_front(list, &a);
+    o_forward_list_push_front(list, &b);
+    ck_assert_ptr_eq(o_forward_list_before_begin(list), list);
+    ck_assert_int_eq(*(unsigned*)o_forward_list_before_begin(list)->data, sizeof(long long));
+    o_forward_list_destroy(list);
+}
+END_TEST
+
+START_TEST(begin_test) {
+    o_forward_list_t* list = o_forward_list_create(int);
+    int a = 31111;
+    int b = 0;
+    o_forward_list_push_front(list, &a);
+    o_forward_list_push_front(list, &b);
+    ck_assert_int_eq(*(int*)o_forward_list_begin(list)->next->data, a);
+    ck_assert_int_eq(*(int*)o_forward_list_begin(list)->data, b);
+    ck_assert_ptr_eq(o_forward_list_begin(list), list->front);
+    o_forward_list_destroy(list);
+}
+END_TEST
+
+START_TEST(end_test) {
+    o_forward_list_t* list = o_forward_list_create(int);
+    int a = 31111;
+    int b = 0;
+    o_forward_list_push_front(list, &b);
+    o_forward_list_push_front(list, &b);
+    ck_assert_ptr_eq(o_forward_list_end(list), NULL);
     o_forward_list_destroy(list);
 }
 END_TEST
@@ -177,10 +220,10 @@ Suite* suite_forward_list(void)
     tcase_add_test(tc, empty_test);
     tcase_add_test(tc, swap_test);
     tcase_add_test(tc, resize_test);
-    /*tcase_add_test(tc, before_begin_test);
+    tcase_add_test(tc, before_begin_test);
     tcase_add_test(tc, begin_test);
     tcase_add_test(tc, end_test);
-    tcase_add_test(tc, node_splice_after_test);
+    /*tcase_add_test(tc, node_splice_after_test);
     tcase_add_test(tc, node_insert_after_test);
     tcase_add_test(tc, node_erase_after_test);
     tcase_add_test(tc, node_get_next_test);
