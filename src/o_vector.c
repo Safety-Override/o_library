@@ -79,10 +79,11 @@ void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amo
 }
 
 const o_vector_node_t* o_vector_cbegin(const o_vector_t* vec) {
-    return vec->data;
+    o_vector_t* ncvec = (o_vector_t*)vec;
+    return (const o_vector_node_t*)o_vector_begin(ncvec);
 }
 
-o_vector_node_t* o_vector_begin(o_vector_t* vec) {
+o_vector_node_t* o_vector_begin(o_vector_t* vec){
     return vec->data;
 }
 
@@ -91,7 +92,8 @@ o_vector_node_t* o_vector_end(o_vector_t* vec) {
 }
 
 const o_vector_node_t* o_vector_cend(const o_vector_t* vec) {
-    return (void*)((char*)vec->data + vec->size * vec->data_type_size);
+    o_vector_t* ncvec = (o_vector_t*)vec;
+    return (const o_vector_node_t*)o_vector_end(ncvec);
 }
 
 bool o_vector_empty(const o_vector_t* vec) {

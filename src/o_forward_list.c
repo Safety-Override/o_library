@@ -84,11 +84,13 @@ o_forward_list_node_t* o_forward_list_begin(o_forward_list_t* list) {
 }
 
 const o_forward_list_node_t* o_forward_list_cbegin(const o_forward_list_t* list) {
-    return list->front;
+    o_forward_list_t* nclist = (o_forward_list_t*)list;
+    return (const o_forward_list_node_t*)o_forward_list_begin(nclist);
 }
 
 const o_forward_list_node_t* o_forward_list_cend(const o_forward_list_t* list) {
-    return NULL;
+    o_forward_list_t* nclist = (o_forward_list_t*)list;
+    return (const o_forward_list_node_t*)o_forward_list_end(nclist);
 }
 
 o_forward_list_node_t* o_forward_list_end(o_forward_list_t* list) {
