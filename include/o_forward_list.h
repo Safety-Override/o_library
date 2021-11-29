@@ -37,9 +37,13 @@ void o_forward_list_resize(o_forward_list_t* list, size_t new_size);
 
 o_forward_list_node_t* o_forward_list_before_begin(const o_forward_list_t* list);
 
-o_forward_list_node_t* o_forward_list_begin(const o_forward_list_t* list);
+o_forward_list_node_t* o_forward_list_begin(o_forward_list_t* list);
 
-o_forward_list_node_t* o_forward_list_end(const o_forward_list_t* list);
+const o_forward_list_node_t* o_forward_list_cbegin(const o_forward_list_t* list);
+
+const o_forward_list_node_t* o_forward_list_cend(const o_forward_list_t* list);
+
+o_forward_list_node_t* o_forward_list_end(o_forward_list_t* list);
 
 void o_forward_list_node_splice_after(o_forward_list_t* list, o_forward_list_node_t* node, o_forward_list_t* insert_list);
 
@@ -47,8 +51,8 @@ void o_forward_list_node_insert_after(o_forward_list_t* list, o_forward_list_nod
 
 void o_forward_list_node_erase_after(o_forward_list_t* list, o_forward_list_node_t* node);
 
-o_forward_list_node_t* o_forward_list_node_get_next(const o_forward_list_t* list, const o_forward_list_node_t* node);
+o_forward_list_node_t* o_forward_list_node_get_next(o_forward_list_t* list, o_forward_list_node_t* node);
 
 void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, const void* data);
 
-void* o_forward_list_node_get_value(const o_forward_list_t* list, o_forward_list_node_t* node);
+const void* o_forward_list_node_get_value(const o_forward_list_t* list, const o_forward_list_node_t* node);

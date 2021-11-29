@@ -79,11 +79,19 @@ o_forward_list_node_t* o_forward_list_before_begin(const o_forward_list_t* list)
     return (void*)list;
 }
 
-o_forward_list_node_t* o_forward_list_begin(const o_forward_list_t* list) {
+o_forward_list_node_t* o_forward_list_begin(o_forward_list_t* list) {
     return list->front;
 }
 
-o_forward_list_node_t* o_forward_list_end(const o_forward_list_t* list) {
+const o_forward_list_node_t* o_forward_list_cbegin(const o_forward_list_t* list) {
+    return list->front;
+}
+
+const o_forward_list_node_t* o_forward_list_cend(const o_forward_list_t* list) {
+    return NULL;
+}
+
+o_forward_list_node_t* o_forward_list_end(o_forward_list_t* list) {
     return NULL;
 }
 
@@ -111,7 +119,7 @@ void o_forward_list_node_erase_after(o_forward_list_t* list, o_forward_list_node
     node->next = node_after_pop;
 }
 
-o_forward_list_node_t* o_forward_list_node_get_next(const o_forward_list_t* list, const o_forward_list_node_t* node) {
+o_forward_list_node_t* o_forward_list_node_get_next(o_forward_list_t* list, o_forward_list_node_t* node) {
     return node->next;
 }
 
@@ -119,6 +127,6 @@ void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t
     memcpy(node->data, data, list->data_type_size);
 }
 
-void* o_forward_list_node_get_value(const o_forward_list_t* list, o_forward_list_node_t* node) {
+const void* o_forward_list_node_get_value(const o_forward_list_t* list, const o_forward_list_node_t* node) {
     return node->data;
 }

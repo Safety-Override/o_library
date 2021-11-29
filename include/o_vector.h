@@ -34,7 +34,7 @@ void o_vector_push_back(o_vector_t* vec, const void* data);
 
 void o_vector_set(o_vector_t* vec, size_t index, const void* data);
 
-void* o_vector_get(const o_vector_t* vec, size_t index);
+const void* o_vector_get(const o_vector_t* vec, size_t index);
 
 void o_vector_pop_back(o_vector_t* vec);
 
@@ -42,9 +42,13 @@ void o_vector_destroy(o_vector_t* vec);
 
 void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amount);
 
-o_vector_node_t* o_vector_begin(const o_vector_t* vec);
+const o_vector_node_t* o_vector_cbegin(const o_vector_t* vec);
 
-o_vector_node_t* o_vector_end(const o_vector_t* vec);
+o_vector_node_t* o_vector_begin(o_vector_t* vec);
+
+o_vector_node_t* o_vector_end(o_vector_t* vec);
+
+const o_vector_node_t* o_vector_cend(const o_vector_t* vec);
 
 bool o_vector_empty(const o_vector_t* vec);
 
@@ -62,4 +66,4 @@ o_vector_node_t* o_vector_node_get_next(const o_vector_t* vec, const o_vector_no
 
 void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, const void* data);
 
-void* o_vector_node_get_value(const o_vector_t* vec, o_vector_node_t* node);
+const void* o_vector_node_get_value(const o_vector_t* vec, const o_vector_node_t* node);

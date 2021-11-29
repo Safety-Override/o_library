@@ -42,7 +42,7 @@ void o_vector_set(o_vector_t* vec, size_t index, const void* data) {
     memcpy(((char*)vec->data) + index * (vec->data_type_size), data, vec->data_type_size);
 }
 
-void* o_vector_get(const o_vector_t* vec, size_t index) {
+const void* o_vector_get(const o_vector_t* vec, size_t index) {
     return ((char*)vec->data) + index * (vec->data_type_size);
 }
 
@@ -78,11 +78,19 @@ void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amo
     vec->size += data_amount;
 }
 
-o_vector_node_t* o_vector_begin(const o_vector_t* vec) {
+const o_vector_node_t* o_vector_cbegin(const o_vector_t* vec) {
     return vec->data;
 }
 
-o_vector_node_t* o_vector_end(const o_vector_t* vec) {
+o_vector_node_t* o_vector_begin(o_vector_t* vec) {
+    return vec->data;
+}
+
+o_vector_node_t* o_vector_end(o_vector_t* vec) {
+    return (void*)((char*)vec->data + vec->size * vec->data_type_size);
+}
+
+const o_vector_node_t* o_vector_cend(const o_vector_t* vec) {
     return (void*)((char*)vec->data + vec->size * vec->data_type_size);
 }
 
@@ -127,6 +135,6 @@ void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, const void*
     memcpy(node->data, data, vec->data_type_size);
 }
 
-void* o_vector_node_get_value(const o_vector_t* vec, o_vector_node_t* node) {
+const void* o_vector_node_get_value(const o_vector_t* vec, const o_vector_node_t* node) {
     return node->data;
 }
