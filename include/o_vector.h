@@ -42,13 +42,13 @@ void o_vector_destroy(o_vector_t* vec);
 
 void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amount);
 
-const o_vector_node_t* o_vector_cbegin(const o_vector_t* vec);
-
 o_vector_node_t* o_vector_begin(o_vector_t* vec);
 
 o_vector_node_t* o_vector_end(o_vector_t* vec);
 
 const o_vector_node_t* o_vector_cend(const o_vector_t* vec);
+
+const o_vector_node_t* o_vector_cbegin(const o_vector_t* vec);
 
 bool o_vector_empty(const o_vector_t* vec);
 
