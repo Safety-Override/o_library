@@ -62,7 +62,9 @@ void o_vector_insert(o_vector_t* vec, const void* data, size_t index);
 
 void o_vector_erase(o_vector_t* vec, size_t index);
 
-o_vector_node_t* o_vector_node_get_next(const o_vector_t* vec, const o_vector_node_t* node);
+o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node);
+
+const o_vector_node_t* o_vector_cnode_get_next(const o_vector_t* vec, const o_vector_node_t* node);
 
 void o_vector_node_set_value(o_vector_t* vec, o_vector_node_t* node, const void* data);
 

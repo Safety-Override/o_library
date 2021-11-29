@@ -127,7 +127,11 @@ void o_vector_erase(o_vector_t* vec, size_t index) {
     --vec->size;
 }
 
-o_vector_node_t* o_vector_node_get_next(const o_vector_t* vec, const o_vector_node_t* node) {
+const o_vector_node_t* o_vector_cnode_get_next(const o_vector_t* vec, const o_vector_node_t* node) {
+    return o_vector_node_get_next((o_vector_t*)vec, (o_vector_node_t*)node);
+}
+
+o_vector_node_t* o_vector_node_get_next(o_vector_t* vec, o_vector_node_t* node) {
     return (void*)((char*)node + vec->data_type_size);
 }
 
