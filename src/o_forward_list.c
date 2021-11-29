@@ -124,7 +124,7 @@ o_forward_list_node_t* o_forward_list_node_get_next(o_forward_list_t* list, o_fo
 }
 
 const o_forward_list_node_t* o_forward_list_cnode_get_next(const o_forward_list_t* list, const o_forward_list_node_t* node) {
-    return o_forward_list_node_get_next((o_forward_list_t*) list, (o_forward_list_node_t*) node);
+    return o_forward_list_node_get_next((o_forward_list_t*)list, (o_forward_list_node_t*)node);
 }
 
 void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, const void* data) {
