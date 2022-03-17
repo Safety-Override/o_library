@@ -25,4 +25,4 @@
        __typeof__ (b) _b = (b); \
      _a < _b ? _a : _b; })
 
-typedef int(*o_compare_func_t)(void*, void*);
+typedef int(*o_compare_func_t)(const void*, const void*);
