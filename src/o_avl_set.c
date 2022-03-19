@@ -1,11 +1,16 @@
+/** 
+ * Copyright (c) 2021 Safety-Override
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the MIT license. See LICENSE for details.
+ */
+
 #include "o_avl_set.h"
 #include "o_avl_private.h"
-
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
 #include <o_functions.h>
 #include <limits.h>
 
