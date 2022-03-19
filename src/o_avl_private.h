@@ -12,8 +12,8 @@
 typedef int(*o_compare_func_t)(const void*, const void*);
 
 struct o_avl_s {
-    o_compare_func_t data_cmp;
-    size_t data_type_size;
+    o_compare_func_t key_cmp;
+    size_t key_type_size;
     o_avl_node_s* begin;
 };
 
