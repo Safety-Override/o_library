@@ -5,6 +5,7 @@ set (SRCS
     src/o_forward_list.c
     src/o_vector.c
     src/o_container.c
+    src/o_avl_set.c
     )
 
 add_library(${PROJECT_NAME} SHARED ${SRCS})

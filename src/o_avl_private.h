@@ -11,15 +11,15 @@
 
 typedef int(*o_compare_func_t)(const void*, const void*);
 
-struct o_avl_s {
-    o_compare_func_t key_cmp;
-    size_t key_type_size;
-    o_avl_node_s* begin;
-};
-
 struct o_avl_node_s {
     void* key;
     int height;
-    o_avl_node_s* left;
-    o_avl_node_s* right;
+    struct o_avl_node_s* left;
+    struct o_avl_node_s* right;
+};
+
+struct o_avl_s {
+    o_compare_func_t key_cmp;
+    size_t key_type_size;
+    struct o_avl_node_s* begin;
 };

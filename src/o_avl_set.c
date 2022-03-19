@@ -1,24 +1,16 @@
-/** 
- * Copyright (c) 2021 Safety-Override
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the MIT license. See LICENSE for details.
- */
+#include "o_avl_set.h"
+#include "o_avl_private.h"
 
-#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
-#include "o_functions.h"
 
-typedef struct o_avl_s o_avl_set_t;
-typedef struct o_avl_node_s o_avl_set_node_t;
+#include <o_functions.h>
+#include <limits.h>
 
 o_avl_set_t* o_avl_set_create_t(size_t key_type_size, o_compare_func_t key_cmp);
 
-#define o_avl_set_create(K, key_cmp)        \
-({                                          \
-    o_avl_set_create_t(sizeof(K), key_cmp); \
-})
- 
 bool o_avl_set_empty(const o_avl_set_t set);
 
 void o_avl_set_clear(o_avl_set_t set);
