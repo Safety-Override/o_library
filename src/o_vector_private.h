@@ -5,7 +5,7 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-#include <stdint.h>
+#include <stddef.h>
 
 struct o_vector_s {
     size_t size;

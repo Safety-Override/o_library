@@ -12,15 +12,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
-#include <o_functions.h>
 #include <limits.h>
+
+#include "o_functions.h"
 
 static inline size_t next_pow2(size_t x) {
     return x == 1 ? 1 : 1 << (CHAR_BIT * sizeof(unsigned) - __builtin_clz((unsigned)x - 1)); 
 }
 
-o_vector_t* o_vector_create_t(size_t data_type_size) {
+o_vector_t* o_vector_create_f(size_t data_type_size) {
     o_vector_t* temp = calloc(1, sizeof(o_vector_t));
     temp->data_type_size = data_type_size;
     return temp;
@@ -65,9 +65,15 @@ void o_vector_reserve(o_vector_t* vec, size_t new_capacity) {
     }
 }
 
-void o_vector_destroy(o_vector_t* vec) {
-    free(vec->data);
-    free(vec);
+void o_vector_delete(o_vector_t* vec) {
+    if (vec) {
+        free(vec->data);
+        free(vec);
+    }
+}
+
+void o_vector_destructor(o_vector_t** vector) {
+    o_vector_delete(*vector);
 }
 
 void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amount) {
@@ -78,16 +84,16 @@ void o_vector_push_back_array(o_vector_t* vec, const void* data, size_t data_amo
     vec->size += data_amount;
 }
 
-const o_vector_node_t* o_vector_cbegin(const o_vector_t* vec) {
-    return o_vector_begin((o_vector_t*)vec);
-}
-
 o_vector_node_t* o_vector_begin(o_vector_t* vec){
     return vec->data;
 }
 
 o_vector_node_t* o_vector_end(o_vector_t* vec) {
     return (void*)((char*)vec->data + vec->size * vec->data_type_size);
+}
+
+const o_vector_node_t* o_vector_cbegin(const o_vector_t* vec) {
+    return o_vector_begin((o_vector_t*)vec);
 }
 
 const o_vector_node_t* o_vector_cend(const o_vector_t* vec) {
