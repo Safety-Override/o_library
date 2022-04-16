@@ -13,10 +13,11 @@
 typedef struct o_forward_list_s o_forward_list_t;
 typedef struct o_forward_list_node_s o_forward_list_node_t;
 
-o_forward_list_t* o_forward_list_create_t(size_t data_type_size);
+o_forward_list_t* o_forward_list_create_f(size_t data_type_size);
+
 #define o_forward_list_create(T)        \
 ({                                      \
-    o_forward_list_create_t(sizeof(T)); \
+    o_forward_list_create_f(sizeof(T)); \
 })
 
 void* o_forward_list_front(const o_forward_list_t* list);
@@ -27,7 +28,7 @@ void o_forward_list_pop_front(o_forward_list_t* list);
 
 bool o_forward_list_empty(const o_forward_list_t* list);
 
-void o_forward_list_destroy(o_forward_list_t* list);
+void o_forward_list_delete(o_forward_list_t* list);
 
 void o_forward_list_clear(o_forward_list_t* list);
 
@@ -35,7 +36,7 @@ void o_forward_list_swap(o_forward_list_t* first_list, o_forward_list_t* second_
 
 void o_forward_list_resize(o_forward_list_t* list, size_t new_size);
 
-o_forward_list_node_t* o_forward_list_before_begin(const o_forward_list_t* list);
+o_forward_list_node_t* o_forward_list_before_begin(o_forward_list_t* list);
 
 o_forward_list_node_t* o_forward_list_begin(o_forward_list_t* list);
 

@@ -5,7 +5,7 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-#include <stdint.h>
+#include <stddef.h>
 
 struct o_forward_list_node_s {
     struct o_forward_list_node_s* next;

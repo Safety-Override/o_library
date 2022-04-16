@@ -18,7 +18,7 @@
 
 #include <o_functions.h>
 
-o_forward_list_t* o_forward_list_create_t(size_t data_type_size) {
+o_forward_list_t* o_forward_list_create_f(size_t data_type_size) {
     o_forward_list_t* list = calloc(1, sizeof(o_forward_list_t));
     list->data_type_size = data_type_size;
     return list;
@@ -45,7 +45,7 @@ bool o_forward_list_empty(const o_forward_list_t* list) {
     return !list->front;
 }
 
-void o_forward_list_destroy(o_forward_list_t* list) {
+void o_forward_list_delete(o_forward_list_t* list) {
     o_forward_list_clear(list);
     free(list);
 }
@@ -75,7 +75,7 @@ void o_forward_list_resize(o_forward_list_t* list, size_t new_size) {
     }
 }
 
-o_forward_list_node_t* o_forward_list_before_begin(const o_forward_list_t* list) {
+o_forward_list_node_t* o_forward_list_before_begin(o_forward_list_t* list) {
     return (void*)list;
 }
 
@@ -105,9 +105,9 @@ void o_forward_list_node_insert_after(o_forward_list_t* list, o_forward_list_nod
 void o_forward_list_node_splice_after(o_forward_list_t* list, o_forward_list_node_t* node, o_forward_list_t* insert_list) {
     o_forward_list_node_t* node_after_insert = node->next;
     node->next = o_forward_list_begin(insert_list);
-    o_forward_list_node_t* current_node = node->next;
-    while (o_forward_list_node_get_next(list, current_node) != o_forward_list_end(insert_list)) {
-        current_node = o_forward_list_node_get_next(list, current_node);
+    o_forward_list_node_t* current_node = o_forward_list_begin(insert_list);
+    while (o_forward_list_node_get_next(insert_list, current_node) != o_forward_list_end(insert_list)) {
+        current_node = o_forward_list_node_get_next(insert_list, current_node);
     }
     current_node->next = node_after_insert;
     free(insert_list);

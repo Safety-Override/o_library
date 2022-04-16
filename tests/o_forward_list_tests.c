@@ -14,7 +14,7 @@ START_TEST(create_test) {
     o_forward_list_t* list = o_forward_list_create(int);
     ck_assert_uint_eq(list->data_type_size, sizeof(int));
     ck_assert_ptr_eq(list->front, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -30,7 +30,7 @@ START_TEST(push_front_test) {
     ck_assert_ptr_eq(list->front->next->next, NULL);
     ck_assert_uint_eq(*(int*)list->front->data, another_val);
     ck_assert_uint_eq(*(int*)list->front->next->data, val);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -45,7 +45,7 @@ START_TEST(pop_front_test) {
     ck_assert_uint_eq(*(int*)list->front->data, val0);
     o_forward_list_pop_front(list);
     ck_assert_ptr_eq(list->front, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -63,7 +63,7 @@ START_TEST(clear_test) {
     o_forward_list_push_front(list, &b);
     ck_assert_int_eq(*(int*)list->front->next->data, b);
     ck_assert_ptr_eq(list->front->next->next, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -82,7 +82,7 @@ START_TEST(front_test) {
     ck_assert_int_eq(*(int*)o_forward_list_front(list), b);
     o_forward_list_pop_front(list);
     ck_assert_int_eq(*(int*)o_forward_list_front(list), a);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -99,7 +99,7 @@ START_TEST(empty_test) {
     ck_assert(!o_forward_list_empty(list));
     o_forward_list_pop_front(list);
     ck_assert(o_forward_list_empty(list));
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -143,8 +143,8 @@ START_TEST(swap_test) {
     first_list_data_node = o_forward_list_node_get_next(list_one, first_list_data_node);
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list_one, first_list_data_node), b);
 
-    o_forward_list_destroy(list_one);
-    o_forward_list_destroy(list_two);
+    o_forward_list_delete(list_one);
+    o_forward_list_delete(list_two);
 }
 END_TEST
 
@@ -165,7 +165,7 @@ START_TEST(resize_test) {
         list_data_node = o_forward_list_node_get_next(list, list_data_node);
     }
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -177,7 +177,7 @@ START_TEST(before_begin_test) {
     o_forward_list_push_front(list, &b);
     ck_assert_ptr_eq(o_forward_list_before_begin(list), list);
     ck_assert_int_eq(*(unsigned*)o_forward_list_before_begin(list)->data, sizeof(long long));
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -190,7 +190,7 @@ START_TEST(begin_test) {
     ck_assert_int_eq(*(int*)o_forward_list_begin(list)->next->data, a);
     ck_assert_int_eq(*(int*)o_forward_list_begin(list)->data, b);
     ck_assert_ptr_eq(o_forward_list_begin(list), list->front);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -201,7 +201,7 @@ START_TEST(end_test) {
     o_forward_list_push_front(list, &b);
     o_forward_list_push_front(list, &b);
     ck_assert_ptr_eq(o_forward_list_end(list), NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -230,7 +230,7 @@ START_TEST(node_splice_after_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list_one, list_data_node), a);
     list_data_node = o_forward_list_node_get_next(list_one, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list_one);
+    o_forward_list_delete(list_one);
     //in the begining
     o_forward_list_t* list_three = o_forward_list_create(int);
     o_forward_list_t* list_four = o_forward_list_create(int);
@@ -253,7 +253,7 @@ START_TEST(node_splice_after_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list_three, list_data_node), a);
     list_data_node = o_forward_list_node_get_next(list_three, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list_three);
+    o_forward_list_delete(list_three);
     //at the end
     o_forward_list_t* list_five = o_forward_list_create(int);
     o_forward_list_t* list_six = o_forward_list_create(int);
@@ -276,7 +276,7 @@ START_TEST(node_splice_after_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list_five, list_data_node), b);
     list_data_node = o_forward_list_node_get_next(list_five, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list_five);
+    o_forward_list_delete(list_five);
 }
 END_TEST
 
@@ -332,7 +332,7 @@ START_TEST(node_insert_after_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list, list_data_node), b);
     list_data_node = o_forward_list_node_get_next(list, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -371,7 +371,7 @@ START_TEST(node_erase_after_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list, list_data_node), b);
     list_data_node = o_forward_list_node_get_next(list, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -388,7 +388,7 @@ START_TEST(node_get_next_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list, list_data_node), a);
     list_data_node = o_forward_list_node_get_next(list, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -409,7 +409,7 @@ START_TEST(node_set_value_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list, list_data_node), a);
     list_data_node = o_forward_list_node_get_next(list, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
@@ -430,7 +430,7 @@ START_TEST(node_get_value_test) {
     ck_assert_int_eq(*(int*)o_forward_list_node_get_value(list, list_data_node), a);
     list_data_node = o_forward_list_node_get_next(list, list_data_node);
     ck_assert_ptr_eq(list_data_node, NULL);
-    o_forward_list_destroy(list);
+    o_forward_list_delete(list);
 }
 END_TEST
 
