@@ -9,6 +9,7 @@
 #define O_AVL_MAP_PRIVATE_H_
 
 #include "o_avl_private.h"
+#include "o_avl_set_private.h"
 
 #include <stddef.h>
 

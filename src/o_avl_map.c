@@ -34,28 +34,33 @@ o_avl_map_t* o_avl_map_create_f(o_compare_func_t key_cmp, size_t sizeof_node, si
 }
  
 bool o_avl_map_empty(const o_avl_map_t* map) {
-    return o_avl_set_empty(map->set);
+    return o_avl_set_empty(&map->set);
 }
 
 void o_avl_map_clear(o_avl_map_t* map) {
-    o_avl_set_clear(map->set);
+    o_avl_set_clear(&map->set);
 }
 
-o_avl_map_insert_result_t o_avl_map_insert(o_avl_map_t* map, const void* key) {
-    // TODO
-
+o_avl_map_insert_result_t o_avl_map_insert(o_avl_map_t* map, const void* key, const void* value) {
+    o_avl_set_insert_result_t result = o_avl_set_insert(&map->set, key);
+    if (result.insertion_took_place) {
+        o_avl_map_node_set_value(map, result.node, value);
+    }
+    return (o_avl_map_insert_result_t){.node = result.node, .insertion_took_place = result.insertion_took_place};
 }
 
-o_avl_map_insert_or_assign_result_t o_avl_map_insert_or_assign(o_avl_map_t* map, const void* key) {
-    // TODO
+o_avl_map_insert_or_assign_result_t o_avl_map_insert_or_assign(o_avl_map_t* map, const void* key, const void* value) {
+    o_avl_set_insert_result_t result = o_avl_set_insert(&map->set, key);
+    o_avl_map_node_set_value(map, result.node, value);
+    return (o_avl_map_insert_or_assign_result_t){.node = result.node, .assignment_took_place = !result.insertion_took_place};
 }
 
 void o_avl_map_erase(o_avl_map_t* map, const void* key) {
-    o_avl_set_erase(map->set, key);
+    o_avl_set_erase(&map->set, key);
 }
 
 void o_avl_map_delete(o_avl_map_t* map) {
-    o_avl_set_clear(map->set);
+    o_avl_set_clear(&map->set);
     free(map);
 }
 
@@ -64,47 +69,47 @@ void o_avl_map_swap(o_avl_map_t* first_map, o_avl_map_t* second_map) {
 }
 
 o_avl_map_node_t* o_avl_map_find(o_avl_map_t* map, const void* key) {
-    return o_avl_set_find(map->set, key);
+    return o_avl_set_find(&map->set, key);
 }
 
 bool o_avl_map_contains(const o_avl_map_t* map, const void* key) {
-    return o_avl_set_contains(map->set, key);
+    return o_avl_set_contains(&map->set, key);
 }
 
 o_avl_map_node_t* o_avl_map_lower_bound(o_avl_map_t* map, const void* key) {
-    return o_avl_set_lower_bound(map->set, key);
+    return o_avl_set_lower_bound(&map->set, key);
 }
 
 o_avl_map_node_t* o_avl_map_upper_bound(o_avl_map_t* map, const void* key) {
-    return o_avl_set_upper_bound(map->set, key);
+    return o_avl_set_upper_bound(&map->set, key);
 }
 
 o_avl_map_node_t* o_avl_map_begin(o_avl_map_t* map) {
-    return o_avl_set_begin(map->set);
+    return o_avl_set_begin(&map->set);
 }
 
 o_avl_map_node_t* o_avl_map_end(o_avl_map_t* map) {
-    return o_avl_set_end(map->set);
+    return o_avl_set_end(&map->set);
 }
 
 const o_avl_map_node_t* o_avl_map_cbegin(const o_avl_map_t* map) {
-    return o_avl_set_cbegin(map->set);
+    return o_avl_set_cbegin(&map->set);
 }
 
 const o_avl_map_node_t* o_avl_map_cend(const o_avl_map_t* map) {
-    return o_avl_set_cend(map->set);
+    return o_avl_set_cend(&map->set);
 }
 
 o_avl_map_node_t* o_avl_map_node_get_next(o_avl_map_t* map, o_avl_map_node_t* node) {
-    return o_avl_set_node_get_next(map->set, node);
+    return o_avl_set_node_get_next(&map->set, node);
 }
 
 const o_avl_map_node_t* o_avl_map_cnode_get_next(const o_avl_map_t* map, const o_avl_map_node_t* node) {
-    return o_avl_set_cnode_get_next(map->set, node);
+    return o_avl_set_cnode_get_next(&map->set, node);
 }
 
 const void* o_avl_map_node_get_key(const o_avl_map_t* map, const o_avl_map_node_t* node) {
-    return o_avl_set_node_get_key(map->set, node);
+    return o_avl_set_node_get_key(&map->set, node);
 }
 
 const void* o_avl_map_node_get_value(const o_avl_map_t* map, const o_avl_map_node_t* node) {
@@ -116,9 +121,9 @@ void o_avl_map_node_set_value(o_avl_map_t* map, o_avl_map_node_t* node, const vo
 }
 
 void o_avl_map_node_erase(o_avl_map_t* map, o_avl_map_node_t* node) {
-    o_avl_set_node_erase(map->set, node);
+    o_avl_set_node_erase(&map->set, node);
 }
 
 size_t o_avl_map_size(const o_avl_map_t* map) {
-    return o_avl_set_size(map->set);
+    return o_avl_set_size(&map->set);
 }
