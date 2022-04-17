@@ -11,20 +11,20 @@
 #include "o_functions.h"
 
 typedef struct o_avl_set_s o_avl_set_t;
-typedef struct o_avl_set_node_s o_avl_set_node_t;
+typedef struct o_avl_node_s o_avl_set_node_t;
 
 typedef struct {
     o_avl_set_node_t* node;
     bool insertion_took_place;
 } o_avl_set_insert_result_t;
 
-#define O_AVL_SET_NODE_STRUCT(K) struct { \
-    struct o_avl_set_node_s* parent;      \
-    struct o_avl_set_node_s* left;        \
-    struct o_avl_set_node_s* right;       \
-    unsigned char height;                 \
-    K key;                                \
-    char end[0];                          \
+#define O_DEFINE_AVL_SET_NODE_STRUCT(K) struct { \
+    struct o_avl_set_node_s* parent;             \
+    struct o_avl_set_node_s* left;               \
+    struct o_avl_set_node_s* right;              \
+    unsigned char height;                        \
+    K key;                                       \
+    char end[0];                                 \
 }
 #define O_AVL_SET_NODE_OFFSETOF_KEY(K) offsetof(O_AVL_SET_NODE_STRUCT(K), key)
 #define O_AVL_SET_NODE_SIZE(K) offsetof(O_AVL_SET_NODE_STRUCT(K), end)

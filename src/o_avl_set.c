@@ -107,48 +107,11 @@ static o_avl_set_node_t* insert(o_avl_set_t* set, o_avl_set_node_t* node, const 
     return balance(node);
 }
 
-o_avl_set_t* o_avl_set_create_f(o_compare_func_t key_cmp, size_t node_size, size_t offsetof_key, size_t sizeof_key) {
-    o_avl_set_t* set = calloc(1, sizeof(o_avl_set_t));
-    set->key_cmp = key_cmp;
-    set->size = 0;
-    set->sizeof_node = node_size;
-    set->offsetof_key = offsetof_key;
-    set->sizeof_key = sizeof_key;
-    return set;
-}
-
-bool o_avl_set_empty(const o_avl_set_t* set) {
-    return !set->size;
-}
-
-void o_avl_set_clear(o_avl_set_t* set) {
-    o_avl_set_node_t* current_node = set->root;
-    while (current_node != NULL) {
-        while (current_node->left) {
-            current_node = current_node->left;
-        }
-        while (current_node->right) {
-            current_node = current_node->right;
-        }
-        o_avl_set_node_t* parent_node = current_node->parent;
-        free(current_node);
-        current_node = parent_node;
-    }
-    set->root = NULL;
-    set->size = 0;
-}
-
-o_avl_set_insert_result_t o_avl_set_insert(o_avl_set_t* set, const void* key) {
-    o_avl_set_insert_result_t result;
-    set->root = insert(set, set->root, key, &result);
-	return result;
-}
-
-o_avl_set_node_t* find_min_node(o_avl_set_node_t* node) {
+static o_avl_set_node_t* find_min_node(o_avl_set_node_t* node) {
     return node->left ? find_min_node(node->left) : node;
 }
 
-o_avl_set_node_t* remove_min_node(o_avl_set_node_t* node) {
+static o_avl_set_node_t* remove_min_node(o_avl_set_node_t* node) {
     if (!node->left) {
         return node->right;
     }
@@ -194,12 +157,49 @@ static o_avl_set_node_t* erase(o_avl_set_t* set, o_avl_set_node_t* node, const v
 	return balance(node);
 }
 
+o_avl_set_t* o_avl_set_create_f(o_compare_func_t key_cmp, size_t node_size, size_t offsetof_key, size_t sizeof_key) {
+    o_avl_set_t* set = calloc(1, sizeof(o_avl_set_t));
+    set->key_cmp = key_cmp;
+    set->size = 0;
+    set->sizeof_node = node_size;
+    set->offsetof_key = offsetof_key;
+    set->sizeof_key = sizeof_key;
+    return set;
+}
+
+bool o_avl_set_empty(const o_avl_set_t* set) {
+    return !set->size;
+}
+
+void o_avl_set_clear(o_avl_set_t* set) {
+    o_avl_set_node_t* current_node = set->root;
+    while (current_node != NULL) {
+        while (current_node->left) {
+            current_node = current_node->left;
+        }
+        while (current_node->right) {
+            current_node = current_node->right;
+        }
+        o_avl_set_node_t* parent_node = current_node->parent;
+        free(current_node);
+        current_node = parent_node;
+    }
+    set->root = NULL;
+    set->size = 0;
+}
+
+o_avl_set_insert_result_t o_avl_set_insert(o_avl_set_t* set, const void* key) {
+    o_avl_set_insert_result_t result;
+    set->root = insert(set, set->root, key, &result);
+	return result;
+}
+
 void o_avl_set_erase(o_avl_set_t* set, const void* key) {
     set->root = erase(set, set->root, key);
 }
 
 void o_avl_set_delete(o_avl_set_t* set) {
-    o_avl_set_clear(set);
+    avl_set_clear(set);
     free(set);
 }
 
@@ -226,14 +226,6 @@ bool o_avl_set_contains(const o_avl_set_t* set, const void* key) {
     return o_avl_set_find((o_avl_set_t*)set, key) != o_avl_set_cend(set);
 }
 
-// lower
-// 1 2 3 5 6 7
-// 4 -> 5
-// 5 -> 5
-// upper
-// 1 2 3 5 6 7
-// 4 -> 5
-// 5 -> 6
 o_avl_set_node_t* o_avl_set_lower_bound(o_avl_set_t* set, const void* key) {
     o_avl_set_node_t* current_node = set->root;
     o_avl_set_node_t* parent_node = o_avl_set_end(set);
@@ -315,7 +307,7 @@ const void* o_avl_set_node_get_key(const o_avl_set_t* set, const o_avl_set_node_
 
 void o_avl_set_node_erase(o_avl_set_t* set, o_avl_set_node_t* node) {
     // TODO: eerase pointer without erase call.
-	const void* key = o_avl_set_node_get_key(set, node); // No need to copy key, because ...?
+	const void* key = o_avl_set_node_get_key(set, node); 
     o_avl_set_erase(set, key);
 }
 

@@ -5,19 +5,14 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+#include "o_avl_private.h"
+
 #include <stddef.h>
 
 #include "o_functions.h"
 
-struct o_avl_set_node_s {
-    struct o_avl_set_node_s* parent;
-    struct o_avl_set_node_s* left;
-    struct o_avl_set_node_s* right;
-    unsigned char height;
-};
-
 struct o_avl_set_s {
-    struct o_avl_set_node_s* root;
+    struct o_avl_node_s* root;
     o_compare_func_t key_cmp;
     size_t size;
     size_t sizeof_node;

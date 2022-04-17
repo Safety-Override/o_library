@@ -5,12 +5,11 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-#include "o_avl_private.h"
-
 #include <stddef.h>
 
-struct o_avl_map_s {
-    struct o_avl_set_s set;
-    size_t offsetof_value;
-    size_t sizeof_value;
+struct o_avl_node_s {
+    struct o_avl_node_s* parent;
+    struct o_avl_node_s* left;
+    struct o_avl_node_s* right;
+    unsigned char height;
 };
