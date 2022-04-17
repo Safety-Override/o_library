@@ -5,6 +5,10 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+
+#ifndef O_VECTOR_H_
+#define O_VECTOR_H_
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -73,3 +77,4 @@ const o_vector_node_t* o_vector_cnode_get_next(const o_vector_t* vector, const o
 void o_vector_node_set_value(o_vector_t* vector, o_vector_node_t* node, const void* data);
 
 const void* o_vector_node_get_value(const o_vector_t* vector, const o_vector_node_t* node);
+#endif //O_VECTOR_H_

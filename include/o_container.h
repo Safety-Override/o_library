@@ -5,6 +5,9 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+#ifndef O_CONTAINER_H_
+#define O_CONTAINER_H_
+
 #include "o_forward_list.h"
 #include "o_vector.h"
 
@@ -37,3 +40,5 @@ o_container_t o_container_create_from_vector(o_vector_t* vec);
 o_container_t o_container_create_from_forward_list(o_forward_list_t* list);
 
 void o_container_create_error(void);
+
+#endif // O_CONTAINER_H_

@@ -1,9 +1,12 @@
 /** 
- * Copyright (c) 2021 Safety-Override
+ * Copyright (c) 2022 Safety-Override
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the MIT license. See LICENSE for details.
  */
+
+#ifndef O_AVL_SET_PRIVATE_H_
+#define O_AVL_SET_PRIVATE_H_
 
 #include "o_avl_private.h"
 
@@ -19,3 +22,5 @@ struct o_avl_set_s {
     size_t offsetof_key;
     size_t sizeof_key;
 };
+
+#endif  // O_AVL_SET_PRIVATE_H_

@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2021 Safety-Override
+ * Copyright (c) 2022 Safety-Override
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the MIT license. See LICENSE for details.
@@ -199,7 +199,7 @@ void o_avl_set_erase(o_avl_set_t* set, const void* key) {
 }
 
 void o_avl_set_delete(o_avl_set_t* set) {
-    avl_set_clear(set);
+    o_avl_set_clear(set);
     free(set);
 }
 

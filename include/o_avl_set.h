@@ -1,9 +1,13 @@
 /** 
- * Copyright (c) 2021 Safety-Override
+ * Copyright (c) 2022 Safety-Override
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the MIT license. See LICENSE for details.
  */
+
+
+#ifndef O_AVL_SET_H_
+#define O_AVL_SET_H_
 
 #include <stddef.h>
 #include <stdbool.h>
@@ -26,8 +30,8 @@ typedef struct {
     K key;                                       \
     char end[0];                                 \
 }
-#define O_AVL_SET_NODE_OFFSETOF_KEY(K) offsetof(O_AVL_SET_NODE_STRUCT(K), key)
-#define O_AVL_SET_NODE_SIZE(K) offsetof(O_AVL_SET_NODE_STRUCT(K), end)
+#define O_AVL_SET_NODE_OFFSETOF_KEY(K) offsetof(O_DEFINE_AVL_SET_NODE_STRUCT(K), key)
+#define O_AVL_SET_NODE_SIZE(K) offsetof(O_DEFINE_AVL_SET_NODE_STRUCT(K), end)
 
 o_avl_set_t* o_avl_set_create_f(o_compare_func_t key_cmp, size_t node_size, size_t offsetof_key, size_t sizeof_key);
 
@@ -73,3 +77,5 @@ const void* o_avl_set_node_get_key(const o_avl_set_t* set, const o_avl_set_node_
 void o_avl_set_node_erase(o_avl_set_t* set, o_avl_set_node_t* node);
 
 size_t o_avl_set_size(const o_avl_set_t* set);
+
+#endif  // O_AVL_SET_H_

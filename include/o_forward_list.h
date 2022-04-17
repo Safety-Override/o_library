@@ -5,6 +5,10 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+
+#ifndef O_FORWARD_LIST_H_
+#define O_FORWARD_LIST_H_
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -59,3 +63,4 @@ const o_forward_list_node_t* o_forward_list_cnode_get_next(const o_forward_list_
 void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, const void* data);
 
 const void* o_forward_list_node_get_value(const o_forward_list_t* list, const o_forward_list_node_t* node);
+#endif //O_FORWARD_LIST_H_

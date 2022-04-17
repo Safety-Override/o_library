@@ -1,9 +1,10 @@
 /** 
- * Copyright (c) 2021 Safety-Override
+ * Copyright (c) 2022 Safety-Override
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the MIT license. See LICENSE for details.
  */
+
 
 #ifndef O_AVL_MAP_H_
 #define O_AVL_MAP_H_
@@ -90,4 +91,4 @@ void o_avl_map_node_erase(o_avl_map_t* map, o_avl_map_node_t* node);
 
 size_t o_avl_map_size(const o_avl_map_t* map);
 
-#endif // O_AVL_MAP_H_
+#endif  // O_AVL_MAP_H_
