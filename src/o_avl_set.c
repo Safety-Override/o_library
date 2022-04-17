@@ -21,45 +21,45 @@ static void* node_get_key(o_avl_set_t* set, o_avl_set_node_t* node) {
 }
 
 static unsigned char height(o_avl_set_node_t* node) {
-	return node ? node->height : 0;
+    return node ? node->height : 0;
 }
 
 static int bfactor(o_avl_set_node_t* node) {
-	return (int)height(node->right) - (int)height(node->left);
+    return (int)height(node->right) - (int)height(node->left);
 }
 
 static void fix_height(o_avl_set_node_t* node) {
-	unsigned char left_height = height(node->left);
-	unsigned char right_height = height(node->right);
+    unsigned char left_height = height(node->left);
+    unsigned char right_height = height(node->right);
     node->height = (left_height > right_height ? right_height : left_height) + 1;
 }
 
 static o_avl_set_node_t* rotate_right(o_avl_set_node_t* p_node) {
-	o_avl_set_node_t* q_node = p_node->left;
+    o_avl_set_node_t* q_node = p_node->left;
     q_node->parent = p_node->parent;
-	p_node->left = q_node->right;
+    p_node->left = q_node->right;
     if (p_node->left) {
         p_node->left->parent = p_node;
     }
-	q_node->right = p_node;
+    q_node->right = p_node;
     q_node->right->parent = q_node;
-	fix_height(p_node);
-	fix_height(q_node);
-	return q_node;
+    fix_height(p_node);
+    fix_height(q_node);
+    return q_node;
 }
 
 static o_avl_set_node_t* rotate_left(o_avl_set_node_t* q_node) {
-	o_avl_set_node_t* p_node = q_node->right;
+    o_avl_set_node_t* p_node = q_node->right;
     p_node->parent = q_node->parent;
-	q_node->right = p_node->left;
+    q_node->right = p_node->left;
     if (q_node->right) {
         q_node->right->parent = q_node;
     }
-	p_node->left = q_node;
-	p_node->left->parent = p_node;
-	fix_height(q_node);
-	fix_height(p_node);
-	return p_node;
+    p_node->left = q_node;
+    p_node->left->parent = p_node;
+    fix_height(q_node);
+    fix_height(p_node);
+    return p_node;
 }
 
 static o_avl_set_node_t* balance(o_avl_set_node_t* node) {
@@ -119,11 +119,11 @@ static o_avl_set_node_t* remove_min_node(o_avl_set_node_t* node) {
     if (node->left) {
         node->left->parent = node;
     }
-	return balance(node);
+    return balance(node);
 }
 
 static o_avl_set_node_t* erase(o_avl_set_t* set, o_avl_set_node_t* node, const void* key) {
-	if (!node) {
+    if (!node) {
         return NULL;
     }
     int key_compare_result = set->key_cmp(key, o_avl_set_node_get_key(set, node));
@@ -132,10 +132,10 @@ static o_avl_set_node_t* erase(o_avl_set_t* set, o_avl_set_node_t* node, const v
     } else if (key_compare_result > 0) {
         node->right = erase(set, node->right, key);	
     } else {
-		o_avl_set_node_t* parent = node->parent;
-		o_avl_set_node_t* left = node->left;
-		o_avl_set_node_t* right = node->right;
-		free(node);
+        o_avl_set_node_t* parent = node->parent;
+        o_avl_set_node_t* left = node->left;
+        o_avl_set_node_t* right = node->right;
+        free(node);
         set->size -= 1;
         if (!right) {
             if (left) {
@@ -145,16 +145,16 @@ static o_avl_set_node_t* erase(o_avl_set_t* set, o_avl_set_node_t* node, const v
         }
         node = find_min_node(right);
         node->parent = parent;
-		node->right = remove_min_node(right);
+        node->right = remove_min_node(right);
         if (node->right) {
             node->right->parent = node;
         }
-		node->left = left;
+        node->left = left;
         if (node->left) {
             node->left->parent = node;
         }
     }
-	return balance(node);
+    return balance(node);
 }
 
 o_avl_set_t* o_avl_set_create_f(o_compare_func_t key_cmp, size_t node_size, size_t offsetof_key, size_t sizeof_key) {
@@ -191,7 +191,7 @@ void o_avl_set_clear(o_avl_set_t* set) {
 o_avl_set_insert_result_t o_avl_set_insert(o_avl_set_t* set, const void* key) {
     o_avl_set_insert_result_t result;
     set->root = insert(set, set->root, key, &result);
-	return result;
+    return result;
 }
 
 void o_avl_set_erase(o_avl_set_t* set, const void* key) {
@@ -307,7 +307,7 @@ const void* o_avl_set_node_get_key(const o_avl_set_t* set, const o_avl_set_node_
 
 void o_avl_set_node_erase(o_avl_set_t* set, o_avl_set_node_t* node) {
     // TODO: eerase pointer without erase call.
-	const void* key = o_avl_set_node_get_key(set, node); 
+    const void* key = o_avl_set_node_get_key(set, node); 
     o_avl_set_erase(set, key);
 }
 

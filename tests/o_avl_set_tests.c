@@ -476,8 +476,7 @@ Suite* suite_forward_list(void)
     return s;
 }
 
-int main(void)
-{
+int main(void) {
     int number_failed;
     SRunner* sr;
     Suite* s_forward_list = suite_forward_list();
