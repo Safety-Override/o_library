@@ -38,7 +38,9 @@ static o_avl_set_node_t* rotate_right(o_avl_set_node_t* p_node) {
 	o_avl_set_node_t* q_node = p_node->left;
     q_node->parent = p_node->parent;
 	p_node->left = q_node->right;
-    p_node->left->parent = p_node;
+    if (p_node->left) {
+        p_node->left->parent = p_node;
+    }
 	q_node->right = p_node;
     q_node->right->parent = q_node;
 	fix_height(p_node);
@@ -50,7 +52,9 @@ static o_avl_set_node_t* rotate_left(o_avl_set_node_t* q_node) {
 	o_avl_set_node_t* p_node = q_node->right;
     p_node->parent = q_node->parent;
 	q_node->right = p_node->left;
-    q_node->right->parent = q_node;
+    if (q_node->right) {
+        q_node->right->parent = q_node;
+    }
 	p_node->left = q_node;
 	p_node->left->parent = p_node;
 	fix_height(q_node);
@@ -149,6 +153,9 @@ o_avl_set_node_t* remove_min_node(o_avl_set_node_t* node) {
         return node->right;
     }
     node->left = remove_min_node(node->left);
+    if (node->left) {
+        node->left->parent = node;
+    }
 	return balance(node);
 }
 
@@ -166,16 +173,23 @@ static o_avl_set_node_t* erase(o_avl_set_t* set, o_avl_set_node_t* node, const v
 		o_avl_set_node_t* left = node->left;
 		o_avl_set_node_t* right = node->right;
 		free(node);
+        set->size -= 1;
         if (!right) {
-            left->parent = parent;
+            if (left) {
+                left->parent = parent;
+            }
             return left;
         }
         node = find_min_node(right);
         node->parent = parent;
 		node->right = remove_min_node(right);
-        node->right->parent = node;
+        if (node->right) {
+            node->right->parent = node;
+        }
 		node->left = left;
-        node->left->parent = node;
+        if (node->left) {
+            node->left->parent = node;
+        }
     }
 	return balance(node);
 }
@@ -221,9 +235,10 @@ bool o_avl_set_contains(const o_avl_set_t* set, const void* key) {
 // 4 -> 5
 // 5 -> 6
 o_avl_set_node_t* o_avl_set_lower_bound(o_avl_set_t* set, const void* key) {
-    // TODO
     o_avl_set_node_t* current_node = set->root;
-    while (current_node != NULL) {
+    o_avl_set_node_t* parent_node = o_avl_set_end(set);
+    while (current_node) {
+        parent_node = current_node;
         int key_compare_result = set->key_cmp(key, o_avl_set_node_get_key(set, current_node));
         if (key_compare_result < 0) {
             current_node = current_node->left;
@@ -233,12 +248,38 @@ o_avl_set_node_t* o_avl_set_lower_bound(o_avl_set_t* set, const void* key) {
             return current_node;
         }
     }
-    return NULL;
+    if (!parent_node) {
+        return o_avl_set_end(set);
+    }
+    int key_compare_result = set->key_cmp(key, o_avl_set_node_get_key(set, parent_node));
+    if (key_compare_result < 0) {
+        return parent_node;
+    }
+    return o_avl_set_node_get_next(set, parent_node);
 }
 
 o_avl_set_node_t* o_avl_set_upper_bound(o_avl_set_t* set, const void* key) {
-    // TODO
-    return NULL;
+    o_avl_set_node_t* current_node = set->root;
+    o_avl_set_node_t* parent_node = o_avl_set_end(set);
+    while (current_node) {
+        parent_node = current_node;
+        int key_compare_result = set->key_cmp(key, o_avl_set_node_get_key(set, current_node));
+        if (key_compare_result < 0) {
+            current_node = current_node->left;
+        } else if (key_compare_result > 0) {
+            current_node = current_node->right;
+        } else {
+            return o_avl_set_node_get_next(set, current_node);
+        }
+    }
+    if (!parent_node) {
+        return o_avl_set_end(set);
+    }
+    int key_compare_result = set->key_cmp(key, o_avl_set_node_get_key(set, parent_node));
+    if (key_compare_result < 0) {
+        return parent_node;
+    }
+    return o_avl_set_node_get_next(set, parent_node);
 }
 
 o_avl_set_node_t* o_avl_set_begin(o_avl_set_t* set) {
@@ -261,7 +302,7 @@ o_avl_set_node_t* o_avl_set_node_get_next(o_avl_set_t* set, o_avl_set_node_t* no
     if (node->parent && node->parent->left == node) {
         return node->parent;
     } 
-    return find_min_node(node->right);
+    return node->right ? find_min_node(node->right) : NULL;
 }
 
 const o_avl_set_node_t* o_avl_set_cnode_get_next(const o_avl_set_t* set, const o_avl_set_node_t* node) {
