@@ -5,10 +5,11 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+#include "o_vector.h"
+#include "o_vector_private.h"
+
 #include <stdlib.h>
 #include <check.h>
-#include <o_vector.h>
-#include <o_vector_private.h>
 
 START_TEST(create_test) {
     o_vector_t* vector WITH_O_VECTOR_DTOR = o_vector_create(int);
@@ -247,13 +248,13 @@ START_TEST(swap_test) {
     void* second_data_array = vector_two->data;
     o_vector_swap(vector_one, vector_two);
     ck_assert_uint_eq(vector_one->data_type_size, vector_two->data_type_size);
-    // check first vector
+    // Check first vector.
     ck_assert_ptr_eq(o_vector_begin(vector_one), second_data_array);
     ck_assert_uint_eq(o_vector_capacity(vector_one), 2U);
     ck_assert_uint_eq(o_vector_size(vector_one), 2U);
     ck_assert_int_eq(*(int*)o_vector_get(vector_one, 0), b);
     ck_assert_int_eq(*(int*)o_vector_get(vector_one, 1), b);
-    // check second vector
+    // Check second vector.
     ck_assert_ptr_eq(o_vector_begin(vector_two), first_data_array);
     ck_assert_uint_eq(o_vector_capacity(vector_two), 4U);
     ck_assert_uint_eq(o_vector_size(vector_two), 4U);
