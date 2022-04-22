@@ -5,26 +5,18 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-
 #ifndef O_FORWARD_LIST_H_
 #define O_FORWARD_LIST_H_
 
-#include <stdint.h>
-#include <stdbool.h>
+#include "hidden/o_forward_list_hidden.h"
+
 #include <stddef.h>
-#include <limits.h>
-
-typedef struct o_forward_list_s o_forward_list_t;
-typedef struct o_forward_list_node_s o_forward_list_node_t;
-
-o_forward_list_t* o_forward_list_create_f(size_t data_type_size);
+#include <stdbool.h>
 
 #define o_forward_list_create(T)        \
-({                                      \
-    o_forward_list_create_f(sizeof(T)); \
-})
+        o_forward_list_create_hidden(T)
 
-void* o_forward_list_front(const o_forward_list_t* list);
+const void* o_forward_list_front(const o_forward_list_t* list);
 
 void o_forward_list_push_front(o_forward_list_t* list, const void* data);
 
@@ -33,6 +25,10 @@ void o_forward_list_pop_front(o_forward_list_t* list);
 bool o_forward_list_empty(const o_forward_list_t* list);
 
 void o_forward_list_delete(o_forward_list_t* list);
+
+void o_forward_list_destructor(o_forward_list_t** list);
+
+#define WITH_O_FORWARD_LIST_DTOR __attribute__((__cleanup__(o_forward_list_destructor)))
 
 void o_forward_list_clear(o_forward_list_t* list);
 
@@ -63,4 +59,5 @@ const o_forward_list_node_t* o_forward_list_cnode_get_next(const o_forward_list_
 void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, const void* data);
 
 const void* o_forward_list_node_get_value(const o_forward_list_t* list, const o_forward_list_node_t* node);
-#endif //O_FORWARD_LIST_H_
+
+#endif  // O_FORWARD_LIST_H_
