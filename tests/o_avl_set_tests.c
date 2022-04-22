@@ -5,100 +5,129 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-#include <stdlib.h>
-#include <check.h>
 #include "o_avl_set.h"
-#include "o_avl_private.h"
 #include "o_avl_set_private.h"
 
-int cmp(const void* a, const void* b) {
-    const int* a_ = a;
-    const int* b_ = b;
-    if (*a_ < *b_) {
+#include <stdlib.h>
+#include <check.h>
+
+int int_compare(const void* a, const void* b) {
+    const int int_a = *(const int*)a;
+    const int int_b = *(const int*)b;
+    if (int_a < int_b) {
         return -1;
     }
-    if (*a_ == *b_) {
-        return 0;
-    }
-    return 1;
+    return int_a > int_b;
 }
 
 START_TEST(create_test) {
-    o_avl_set_t* set = o_avl_set_create(int, cmp);
-    ck_assert_uint_eq(set->sizeof_key, sizeof(int));
+    o_avl_set_t* set = o_avl_set_create(int, int_compare);
     ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    ck_assert_uint_eq(set->node_size, 32);
+    ck_assert_uint_eq(set->offsetof_key, 28);
+    ck_assert_uint_eq(set->sizeof_key, sizeof(int));
     o_avl_set_delete(set);
 }
 END_TEST
-/*
-START_TEST(push_front_test) {
-    o_forward_list_t* list = o_forward_list_create(unsigned);
-    unsigned val = 31111U;
-    o_forward_list_push_front(list, &val);
-    ck_assert_uint_eq(list->data_type_size, sizeof(unsigned));
-    ck_assert_ptr_eq(list->front->next, NULL);
-    ck_assert_uint_eq(*(int*)list->front->data, val);
-    unsigned another_val = 311435U;
-    o_forward_list_push_front(list, &another_val);
-    ck_assert_ptr_eq(list->front->next->next, NULL);
-    ck_assert_uint_eq(*(int*)list->front->data, another_val);
-    ck_assert_uint_eq(*(int*)list->front->next->data, val);
-    o_forward_list_delete(list);
-}
-END_TEST
 
-START_TEST(pop_front_test) {
-    o_forward_list_t* list = o_forward_list_create(unsigned);
-    unsigned val0 = 31111U;
-    unsigned val1 = 4324234U;
-    o_forward_list_push_front(list, &val0);
-    o_forward_list_push_front(list, &val1);
-    o_forward_list_pop_front(list);
-    ck_assert_ptr_eq(list->front->next, NULL);
-    ck_assert_uint_eq(*(int*)list->front->data, val0);
-    o_forward_list_pop_front(list);
-    ck_assert_ptr_eq(list->front, NULL);
-    o_forward_list_delete(list);
+START_TEST(empty_test) {
+    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    ck_assert(o_avl_set_empty(set));
+    int key = 55;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 1);
+    ck_assert_ptr_ne(set->root, NULL);
+    ck_assert(!o_avl_set_empty(set));
+    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(clear_test) {
-    o_forward_list_t* list = o_forward_list_create(int);
-    int a = 31111;
-    const int b = 5;
-    o_forward_list_push_front(list, &a);
-    o_forward_list_push_front(list, &a);
-    o_forward_list_push_front(list, &a);
-    o_forward_list_push_front(list, &a);
-    o_forward_list_clear(list);
-    ck_assert_ptr_eq(list->front, NULL);
-    o_forward_list_push_front(list, &b);
-    o_forward_list_push_front(list, &b);
-    ck_assert_int_eq(*(int*)list->front->next->data, b);
-    ck_assert_ptr_eq(list->front->next->next, NULL);
-    o_forward_list_delete(list);
+    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    ck_assert(o_avl_set_empty(set));
+    int key = 55;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 1);
+    ck_assert_ptr_ne(set->root, NULL);
+    ck_assert(!o_avl_set_empty(set));
+    ++key;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 2);
+    ++key;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 3);
+    ++key;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 4);
+    o_avl_set_clear(set);
+    ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    ck_assert(o_avl_set_empty(set));
+    o_avl_set_delete(set);
 }
 END_TEST
 
-START_TEST(destroy_test) {
-    ck_assert_int_eq(0, 0); // it just works bacause it calls clear func
+START_TEST(insert_test) {
+    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    ck_assert(o_avl_set_empty(set));
+    int key = 55;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 1);
+    ck_assert_ptr_ne(set->root, NULL);
+    ck_assert(!o_avl_set_empty(set));
+    ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, set->root), key);
+    ++key;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 2);
+    ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, set->root->right), key);
+    o_avl_set_insert_result_t;
+    o_avl_set_clear(set);
+    ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    ck_assert(o_avl_set_empty(set));
+    o_avl_set_delete(set);
 }
 END_TEST
 
-START_TEST(front_test) {
-    o_forward_list_t* list = o_forward_list_create(int);
-    int a = 31111;
-    int b = 0;
-    o_forward_list_push_front(list, &a);
-    ck_assert_int_eq(*(int*)o_forward_list_front(list), a);
-    o_forward_list_push_front(list, &b);
-    ck_assert_int_eq(*(int*)o_forward_list_front(list), b);
-    o_forward_list_pop_front(list);
-    ck_assert_int_eq(*(int*)o_forward_list_front(list), a);
-    o_forward_list_delete(list);
+START_TEST(erase_test) {
+    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    ck_assert(o_avl_set_empty(set));
+    int key = 55;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 1);
+    ck_assert_ptr_ne(set->root, NULL);
+    ck_assert(!o_avl_set_empty(set));
+    ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, set->root), key);
+    ++key;
+    o_avl_set_insert(set, &key);
+    ck_assert_uint_eq(set->size, 2);
+    ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, set->root->right), key);
+    o_avl_set_erase(set, &key);
+    ck_assert_ptr_eq(set->root->right, NULL);
+    ck_assert_uint_eq(set->size, 1);
+    ck_assert_ptr_ne(set->root, NULL);
+    --key;
+    o_avl_set_erase(set, &key);
+    ck_assert_ptr_eq(set->root, NULL);
+    ck_assert_uint_eq(set->size, 0);
+    o_avl_set_delete(set);
 }
 END_TEST
 
+START_TEST(delete_test) {
+    ck_assert(true);//works on clear, so works until clear works
+}
+END_TEST
+/*
 START_TEST(empty_test) {
     o_forward_list_t* list = o_forward_list_create(int);
     int a = 31111;
@@ -455,23 +484,24 @@ Suite* suite_forward_list(void)
     s = suite_create("o_avl_set workability tests");
     tc = tcase_create("o_avl_set basic usage check");
     tcase_add_test(tc, create_test);
-    /*tcase_add_test(tc, push_front_test);
-    tcase_add_test(tc, pop_front_test);
-    tcase_add_test(tc, clear_test);
-    tcase_add_test(tc, destroy_test);
-    tcase_add_test(tc, front_test);
     tcase_add_test(tc, empty_test);
-    tcase_add_test(tc, swap_test);
-    tcase_add_test(tc, resize_test);
-    tcase_add_test(tc, before_begin_test);
-    tcase_add_test(tc, begin_test);
-    tcase_add_test(tc, end_test);
-    tcase_add_test(tc, node_splice_after_test);
-    tcase_add_test(tc, node_insert_after_test);
-    tcase_add_test(tc, node_erase_after_test);
-    tcase_add_test(tc, node_get_next_test);
-    tcase_add_test(tc, node_set_value_test);
-    tcase_add_test(tc, node_get_value_test);*/
+    tcase_add_test(tc, clear_test);
+    tcase_add_test(tc, insert_test);
+    tcase_add_test(tc, erase_test);
+    tcase_add_test(tc, delete_test);
+    /*
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );
+    tcase_add_test(tc, );*/
     suite_add_tcase(s, tc);
     return s;
 }
