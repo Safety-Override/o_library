@@ -5,28 +5,21 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-
 #ifndef O_VECTOR_H_
 #define O_VECTOR_H_
 
-#include <stdint.h>
-#include <stdbool.h>
+#include "hidden/o_vector_hidden.h"
+
 #include <stddef.h>
-
-typedef struct o_vector_s o_vector_t;
-typedef struct o_vector_node_s o_vector_node_t;
-
-o_vector_t* o_vector_create_f(size_t data_type_size);
-
-#define o_vector_create(T)        \
-({                                \
-    o_vector_create_f(sizeof(T)); \
-})
+#include <stdbool.h>
 
 #define o_vector_for_each(vector, node)                     \
         for(o_vector_node_t* node = o_vector_begin(vector); \
             node != o_vector_end(vector);                   \
             node = o_vector_node_get_next(vector, node))
+
+#define o_vector_create(T)        \
+        o_vector_create_hidden(T)
 
 void o_vector_delete(o_vector_t* vector);
 
@@ -77,4 +70,5 @@ const o_vector_node_t* o_vector_cnode_get_next(const o_vector_t* vector, const o
 void o_vector_node_set_value(o_vector_t* vector, o_vector_node_t* node, const void* data);
 
 const void* o_vector_node_get_value(const o_vector_t* vector, const o_vector_node_t* node);
-#endif //O_VECTOR_H_
+
+#endif  // O_VECTOR_H_

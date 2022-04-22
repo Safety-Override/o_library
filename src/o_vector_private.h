@@ -5,6 +5,9 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
+#ifndef O_VECTOR_PRIVATE_H_
+#define O_VECTOR_PRIVATE_H_
+
 #include <stddef.h>
 
 struct o_vector_s {
@@ -17,3 +20,5 @@ struct o_vector_s {
 struct o_vector_node_s {
     char data[0];
 };
+
+#endif  // O_VECTOR_PRIVATE_H_
