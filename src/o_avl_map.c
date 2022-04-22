@@ -21,11 +21,11 @@ static void* node_get_value(o_avl_map_t* map, o_avl_map_node_t* node) {
     return (char*)node + map->offsetof_value;
 }
 
-o_avl_map_t* o_avl_map_create_f(o_compare_func_t key_cmp, size_t sizeof_node, size_t offsetof_key, size_t sizeof_key, size_t offsetof_value, size_t sizeof_value) {
+o_avl_map_t* o_avl_map_create_f(o_compare_func_t key_cmp, size_t node_size, size_t offsetof_key, size_t sizeof_key, size_t offsetof_value, size_t sizeof_value) {
     o_avl_map_t* map = calloc(1, sizeof(o_avl_map_t));
     map->set.key_cmp = key_cmp;
     map->set.size = 0;
-    map->set.sizeof_node = sizeof_node;
+    map->set.node_size = node_size;
     map->set.offsetof_key = offsetof_key;
     map->set.sizeof_key = sizeof_key;
     map->offsetof_value = offsetof_value;

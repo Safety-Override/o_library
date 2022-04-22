@@ -82,7 +82,7 @@ static o_avl_set_node_t* balance(o_avl_set_node_t* node) {
 }
 
 static o_avl_set_node_t* create_node_from_key(o_avl_set_t* set, o_avl_set_node_t* parent, const void* key) {
-    o_avl_set_node_t* node = calloc(1, set->sizeof_node);
+    o_avl_set_node_t* node = calloc(1, set->node_size);
     node->parent = parent;
     memcpy(node_get_key(set, node), key, set->sizeof_key);
     fix_height(node);
@@ -161,7 +161,7 @@ o_avl_set_t* o_avl_set_create_f(o_compare_func_t key_cmp, size_t node_size, size
     o_avl_set_t* set = calloc(1, sizeof(o_avl_set_t));
     set->key_cmp = key_cmp;
     set->size = 0;
-    set->sizeof_node = node_size;
+    set->node_size = node_size;
     set->offsetof_key = offsetof_key;
     set->sizeof_key = sizeof_key;
     return set;
@@ -306,7 +306,7 @@ const void* o_avl_set_node_get_key(const o_avl_set_t* set, const o_avl_set_node_
 }
 
 void o_avl_set_node_erase(o_avl_set_t* set, o_avl_set_node_t* node) {
-    // TODO: eerase pointer without erase call.
+    // TODO: erase pointer without erase call.
     const void* key = o_avl_set_node_get_key(set, node); 
     o_avl_set_erase(set, key);
 }
