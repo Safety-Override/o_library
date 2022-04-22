@@ -7,31 +7,39 @@
 
 #include "o_forward_list.h"
 #include "o_forward_list_private.h"
+
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #ifdef WIN32
 #include <malloc.h>
 #else
 #include <alloca.h>
-#endif // WIN32
+#endif  // WIN32
 
-#include <o_functions.h>
+#include "o_functions.h"
 
-o_forward_list_t* o_forward_list_create_f(size_t data_type_size) {
+static void* node_get_value(o_forward_list_t* list, o_forward_list_node_t* node) {
+    return (char*)node + list->offsetof_value;
+}
+
+o_forward_list_t* o_forward_list_create_f(size_t node_size, size_t offsetof_value, size_t sizeof_value) {
     o_forward_list_t* list = calloc(1, sizeof(o_forward_list_t));
-    list->data_type_size = data_type_size;
+    list->node_size = node_size;
+    list->offsetof_value = offsetof_value;
+    list->sizeof_value = sizeof_value;
     return list;
 }
 
-void* o_forward_list_front(const o_forward_list_t* list) {
-    return list->front->data;
+const void* o_forward_list_front(const o_forward_list_t* list) {
+    return node_get_value((o_forward_list_t*)list, (o_forward_list_node_t*)list->front);
 }
 
 void o_forward_list_push_front(o_forward_list_t* list, const void* data) {
     o_forward_list_node_t* node_after_insert = o_forward_list_begin(list);
-    list->front = malloc(sizeof(o_forward_list_node_t) + list->data_type_size);
-    memcpy(list->front->data, data, list->data_type_size);
+    list->front = malloc(list->node_size);
+    memcpy(node_get_value(list, list->front), data, list->sizeof_value);
     list->front->next = node_after_insert;
 }
 
@@ -46,8 +54,14 @@ bool o_forward_list_empty(const o_forward_list_t* list) {
 }
 
 void o_forward_list_delete(o_forward_list_t* list) {
-    o_forward_list_clear(list);
-    free(list);
+    if (list) {
+        o_forward_list_clear(list);
+        free(list);
+    }
+}
+
+void o_forward_list_destructor(o_forward_list_t** list) {
+    o_forward_list_delete(*list);
 }
 
 void o_forward_list_clear(o_forward_list_t* list) {
@@ -64,8 +78,8 @@ void o_forward_list_resize(o_forward_list_t* list, size_t new_size) {
     o_forward_list_node_t* current_node = o_forward_list_before_begin(list);
     for (; new_size; --new_size) {
         if (o_forward_list_node_get_next(list, current_node) == o_forward_list_end(list)) {
-            void* null_value = alloca(list->data_type_size);
-            memset(null_value, 0, list->data_type_size);
+            void* null_value = alloca(list->sizeof_value);
+            memset(null_value, 0, list->sizeof_value);
             o_forward_list_node_insert_after(list, current_node, null_value);
         }
         current_node = o_forward_list_node_get_next(list, current_node);
@@ -97,8 +111,8 @@ o_forward_list_node_t* o_forward_list_end(o_forward_list_t* list) {
 
 void o_forward_list_node_insert_after(o_forward_list_t* list, o_forward_list_node_t* node, const void* data) {
     o_forward_list_node_t* node_after_insert = o_forward_list_node_get_next(list, node);
-    node->next = malloc(sizeof(o_forward_list_node_t) + list->data_type_size);
-    memcpy(node->next->data, data, list->data_type_size);
+    node->next = malloc(list->node_size);
+    memcpy(node_get_value(list, node->next), data, list->sizeof_value);
     node->next->next = node_after_insert;
 }
 
@@ -128,9 +142,9 @@ const o_forward_list_node_t* o_forward_list_cnode_get_next(const o_forward_list_
 }
 
 void o_forward_list_node_set_value(o_forward_list_t* list, o_forward_list_node_t* node, const void* data) {
-    memcpy(node->data, data, list->data_type_size);
+    memcpy(node_get_value(list, node), data, list->sizeof_value);
 }
 
 const void* o_forward_list_node_get_value(const o_forward_list_t* list, const o_forward_list_node_t* node) {
-    return node->data;
+    return node_get_value((o_forward_list_t*)list, (o_forward_list_node_t*)node);
 }
