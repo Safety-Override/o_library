@@ -24,9 +24,9 @@ typedef struct o_avl_node_s o_avl_map_node_t;
     V value;                                        \
     char end[0];                                    \
 }
-#define O_AVL_MAP_NODE_OFFSETOF_KEY(K, V) offsetof(O_AVL_MAP_NODE_STRUCT(K, V), key)
-#define O_AVL_MAP_NODE_OFFSETOF_VALUE(K, V) offsetof(O_AVL_MAP_NODE_STRUCT(K, V), value)
-#define O_AVL_MAP_NODE_SIZE(K, V) offsetof(O_AVL_MAP_NODE_STRUCT(K, V), end)
+#define O_AVL_MAP_NODE_OFFSETOF_KEY(K, V) offsetof(O_DEFINE_AVL_MAP_NODE_STRUCT(K, V), key)
+#define O_AVL_MAP_NODE_OFFSETOF_VALUE(K, V) offsetof(O_DEFINE_AVL_MAP_NODE_STRUCT(K, V), value)
+#define O_AVL_MAP_NODE_SIZE(K, V) offsetof(O_DEFINE_AVL_MAP_NODE_STRUCT(K, V), end)
 
 o_avl_map_t* o_avl_map_create_f(o_compare_func_t key_cmp, size_t node_size, size_t offsetof_key, size_t sizeof_key, size_t offsetof_value, size_t sizeof_value);
 
