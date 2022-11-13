@@ -110,11 +110,13 @@ START_TEST(erase_test) {
     o_avl_set_insert(set, &key);
     ck_assert_uint_eq(set->size, 2);
     ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, set->root->right), key);
+    --key;
     o_avl_set_erase(set, &key);
+    ++key;
+    ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, set->root), key);
     ck_assert_ptr_eq(set->root->right, NULL);
     ck_assert_uint_eq(set->size, 1);
     ck_assert_ptr_ne(set->root, NULL);
-    --key;
     o_avl_set_erase(set, &key);
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
