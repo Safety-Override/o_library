@@ -422,7 +422,7 @@ START_TEST(size_test) {
 }
 END_TEST
 
-Suite* suite_forward_list(void)
+Suite* suite_avl_set(void)
 {
     Suite* s;
     TCase* tc;
@@ -452,8 +452,8 @@ Suite* suite_forward_list(void)
 int main(void) {
     int number_failed;
     SRunner* sr;
-    Suite* s_forward_list = suite_forward_list();
-    sr = srunner_create(s_forward_list);
+    Suite* s_avl_set = suite_avl_set();
+    sr = srunner_create(s_avl_set);
     srunner_run_all(sr, CK_NORMAL);
     number_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
