@@ -203,6 +203,10 @@ void o_avl_set_delete(o_avl_set_t* set) {
     free(set);
 }
 
+void o_avl_set_destructor(o_avl_set_t** set) {
+    o_avl_set_delete(*set);
+}
+
 void o_avl_set_swap(o_avl_set_t* first_set, o_avl_set_t* second_set) {
     o_swap(*first_set, *second_set);
 }

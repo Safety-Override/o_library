@@ -31,6 +31,10 @@ void o_avl_set_erase(o_avl_set_t* set, const void* key);
 
 void o_avl_set_delete(o_avl_set_t* set);
 
+void o_avl_set_destructor(o_avl_set_t** set);
+
+#define WITH_O_AVL_SET_DTOR __attribute__((__cleanup__(o_avl_set_destructor)))
+
 void o_avl_set_swap(o_avl_set_t* first_set, o_avl_set_t* second_set);
 
 o_avl_set_node_t* o_avl_set_find(o_avl_set_t* set, const void* key);

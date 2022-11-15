@@ -21,18 +21,17 @@ int int_compare(const void* a, const void* b) {
 }
 
 START_TEST(create_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
     ck_assert_uint_eq(set->node_size, 32);
     ck_assert_uint_eq(set->offsetof_key, 28);
     ck_assert_uint_eq(set->sizeof_key, sizeof(int));
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(empty_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
     ck_assert(o_avl_set_empty(set));
@@ -41,12 +40,11 @@ START_TEST(empty_test) {
     ck_assert_uint_eq(set->size, 1);
     ck_assert_ptr_ne(set->root, NULL);
     ck_assert(!o_avl_set_empty(set));
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(clear_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);
@@ -65,12 +63,11 @@ START_TEST(clear_test) {
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
     ck_assert(o_avl_set_empty(set));
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(insert_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert_result_t res = o_avl_set_insert(set, &key);
@@ -93,12 +90,11 @@ START_TEST(insert_test) {
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
     ck_assert(o_avl_set_empty(set));
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(erase_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);
@@ -120,7 +116,6 @@ START_TEST(erase_test) {
     o_avl_set_erase(set, &key);
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
-    o_avl_set_delete(set);
 }
 END_TEST
 
@@ -130,8 +125,8 @@ START_TEST(delete_test) {
 END_TEST
 
 START_TEST(swap_test) {
-    o_avl_set_t* first_set = o_avl_set_create(int, int_compare);
-    o_avl_set_t* second_set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* first_set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
+    o_avl_set_t* second_set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(first_set));
     ck_assert(o_avl_set_empty(second_set));
     int key = 55;
@@ -155,13 +150,11 @@ START_TEST(swap_test) {
     ck_assert_int_eq(*(int*)o_avl_set_node_get_key(first_set, first_set->root->right), 56);
     ck_assert_uint_eq(second_set->size, 1);
     ck_assert_int_eq(*(int*)o_avl_set_node_get_key(second_set, second_set->root), 57);
-    o_avl_set_delete(first_set);
-    o_avl_set_delete(second_set);
 }
 END_TEST
 
 START_TEST(find_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);
@@ -173,12 +166,11 @@ START_TEST(find_test) {
     ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, set->root->right), key);
     res = o_avl_set_find(set, &key);
     ck_assert_int_eq(*(int*)o_avl_set_node_get_key(set, res), key);
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(contains_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     ck_assert(!o_avl_set_contains(set, &key));
@@ -193,12 +185,11 @@ START_TEST(contains_test) {
     ck_assert(o_avl_set_contains(set, &key));
     o_avl_set_erase(set, &key);
     ck_assert(!o_avl_set_contains(set, &key));
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(lower_bound_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);//55
@@ -230,12 +221,11 @@ START_TEST(lower_bound_test) {
     key = 62;
     res = o_avl_set_lower_bound(set, &key);
     ck_assert_ptr_eq(res, NULL);
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(upper_bound_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);//55
@@ -267,12 +257,11 @@ START_TEST(upper_bound_test) {
     key = 62;
     res = o_avl_set_upper_bound(set, &key);
     ck_assert_ptr_eq(res, NULL);
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(begin_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);//55
@@ -295,7 +284,6 @@ START_TEST(begin_test) {
     o_avl_set_clear(set);
     res = o_avl_set_begin(set);
     ck_assert_ptr_eq(res, NULL);
-    o_avl_set_delete(set);
 }
 END_TEST
 
@@ -305,7 +293,7 @@ START_TEST(end_test) {
 END_TEST
 
 START_TEST(node_get_next_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);//55
@@ -330,12 +318,11 @@ START_TEST(node_get_next_test) {
         ++key;
         cur = o_avl_set_node_get_next(set, cur);
     }
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(node_get_key_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert_result_t res = o_avl_set_insert(set, &key);
@@ -358,12 +345,11 @@ START_TEST(node_get_key_test) {
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
     ck_assert(o_avl_set_empty(set));
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(node_erase_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);
@@ -386,12 +372,11 @@ START_TEST(node_erase_test) {
     ck_assert_ptr_eq(o_avl_set_find(set, &key), NULL);
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
-    o_avl_set_delete(set);
 }
 END_TEST
 
 START_TEST(size_test) {
-    o_avl_set_t* set = o_avl_set_create(int, int_compare);
+    o_avl_set_t* set WITH_O_AVL_SET_DTOR = o_avl_set_create(int, int_compare);
     ck_assert(o_avl_set_empty(set));
     int key = 55;
     o_avl_set_insert(set, &key);
@@ -418,7 +403,6 @@ START_TEST(size_test) {
     ck_assert_ptr_eq(set->root, NULL);
     ck_assert_uint_eq(set->size, 0);
     ck_assert_uint_eq(set->size, o_avl_set_size(set));
-    o_avl_set_delete(set);
 }
 END_TEST
 
