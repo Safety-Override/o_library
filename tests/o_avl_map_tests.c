@@ -21,7 +21,7 @@ int int_compare(const void* a, const void* b) {
 }
 
 START_TEST(create_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
     ck_assert_uint_eq(map->set.node_size, 36);
@@ -29,12 +29,11 @@ START_TEST(create_test) {
     ck_assert_uint_eq(map->set.sizeof_key, sizeof(int));
     ck_assert_uint_eq(map->offsetof_value, 32);
     ck_assert_uint_eq(map->sizeof_value, sizeof(int));
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(empty_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
     ck_assert(o_avl_map_empty(map));
@@ -44,12 +43,11 @@ START_TEST(empty_test) {
     ck_assert_uint_eq(map->set.size, 1);
     ck_assert_ptr_ne(map->set.root, NULL);
     ck_assert(!o_avl_map_empty(map));
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(clear_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -69,12 +67,11 @@ START_TEST(clear_test) {
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
     ck_assert(o_avl_map_empty(map));
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(insert_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -105,12 +102,11 @@ START_TEST(insert_test) {
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
     ck_assert(o_avl_map_empty(map));
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(insert_or_assign_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -145,12 +141,11 @@ START_TEST(insert_or_assign_test) {
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
     ck_assert(o_avl_map_empty(map));
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(erase_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value =  66;
@@ -177,7 +172,6 @@ START_TEST(erase_test) {
     o_avl_map_erase(map, &key);
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
-    o_avl_map_delete(map);
 }
 END_TEST
 
@@ -187,8 +181,8 @@ START_TEST(delete_test) {
 END_TEST
 
 START_TEST(swap_test) {
-    o_avl_map_t* first_map = o_avl_map_create(int, int, int_compare);
-    o_avl_map_t* second_map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* first_map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* second_map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(first_map));
     ck_assert(o_avl_map_empty(second_map));
     int key = 55;
@@ -221,13 +215,11 @@ START_TEST(swap_test) {
     ck_assert_uint_eq(second_map->set.size, 1);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_key(second_map, second_map->set.root), 57);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_value(second_map, second_map->set.root), 68);
-    o_avl_map_delete(first_map);
-    o_avl_map_delete(second_map);
 }
 END_TEST
 
 START_TEST(find_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -244,12 +236,11 @@ START_TEST(find_test) {
     res = o_avl_map_find(map, &key);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_key(map, res), key);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_value(map, res), value);
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(contains_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -266,12 +257,11 @@ START_TEST(contains_test) {
     ck_assert(o_avl_map_contains(map, &key));
     o_avl_map_erase(map, &key);
     ck_assert(!o_avl_map_contains(map, &key));
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(lower_bound_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -314,12 +304,11 @@ START_TEST(lower_bound_test) {
     key = 62;
     res = o_avl_map_lower_bound(map, &key);
     ck_assert_ptr_eq(res, NULL);
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(upper_bound_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -361,12 +350,11 @@ START_TEST(upper_bound_test) {
     key = 62;
     res = o_avl_map_upper_bound(map, &key);
     ck_assert_ptr_eq(res, NULL);
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(begin_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -397,7 +385,6 @@ START_TEST(begin_test) {
     o_avl_map_clear(map);
     res = o_avl_map_begin(map);
     ck_assert_ptr_eq(res, NULL);
-    o_avl_map_delete(map);
 }
 END_TEST
 
@@ -407,7 +394,7 @@ START_TEST(end_test) {
 END_TEST
 
 START_TEST(node_get_next_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -439,12 +426,11 @@ START_TEST(node_get_next_test) {
         ++key;
         cur = o_avl_map_node_get_next(map, cur);
     }
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(node_get_key_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -462,12 +448,11 @@ START_TEST(node_get_key_test) {
     ck_assert(res.insertion_took_place);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_key(map, res.node), key);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_key(map, map->set.root->right), key);
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(node_get_value_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -485,12 +470,11 @@ START_TEST(node_get_value_test) {
     ck_assert(res.insertion_took_place);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_value(map, res.node), value);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_value(map, map->set.root->right), value);
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(node_set_value_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -525,12 +509,11 @@ START_TEST(node_set_value_test) {
     ck_assert_int_eq(*(int*)o_avl_map_node_get_value(map, res.node), value);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_value(map, map->set.root->right), value);
     ck_assert_int_eq(*(int*)o_avl_map_node_get_key(map, map->set.root->right), key);
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(node_erase_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -554,12 +537,11 @@ START_TEST(node_erase_test) {
     ck_assert_ptr_eq(o_avl_map_find(map, &key), NULL);
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
-    o_avl_map_delete(map);
 }
 END_TEST
 
 START_TEST(size_test) {
-    o_avl_map_t* map = o_avl_map_create(int, int, int_compare);
+    o_avl_map_t* map WITH_O_AVL_MAP_DTOR = o_avl_map_create(int, int, int_compare);
     ck_assert(o_avl_map_empty(map));
     int key = 55;
     int value = 66;
@@ -587,7 +569,6 @@ START_TEST(size_test) {
     ck_assert_ptr_eq(map->set.root, NULL);
     ck_assert_uint_eq(map->set.size, 0);
     ck_assert_uint_eq(map->set.size, o_avl_map_size(map));
-    o_avl_map_delete(map);
 }
 END_TEST
 

@@ -38,6 +38,10 @@ void o_avl_map_erase(o_avl_map_t* map, const void* key);
 
 void o_avl_map_delete(o_avl_map_t* map);
 
+void o_avl_map_destructor(o_avl_map_t** map);
+
+#define WITH_O_AVL_MAP_DTOR __attribute__((__cleanup__(o_avl_map_destructor)))
+
 void o_avl_map_swap(o_avl_map_t* first_map, o_avl_map_t* second_map);
 
 o_avl_map_node_t* o_avl_map_find(o_avl_map_t* map, const void* key);

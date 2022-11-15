@@ -64,6 +64,10 @@ void o_avl_map_delete(o_avl_map_t* map) {
     free(map);
 }
 
+void o_avl_map_destructor(o_avl_map_t** map) {
+    o_avl_map_delete(*map);
+}
+
 void o_avl_map_swap(o_avl_map_t* first_map, o_avl_map_t* second_map) {
     o_swap(*first_map, *second_map);
 }
