@@ -8,6 +8,8 @@
 #ifndef O_FUNCTIONS_H_
 #define O_FUNCTIONS_H_
 
+#include <limits.h>
+
 #ifdef _GNUC_
 #define o_likely(x)       __builtin_expect(!!(x), 1)
 #define o_unlikely(x)     __builtin_expect((x), 0)
@@ -67,5 +69,9 @@ unsigned int o_clzll(unsigned long long num) {
        _a < _b ? _a : _b; })
 
 typedef int(*o_compare_func_t)(const void*, const void*);
+
+typedef bool(*o_key_equal_func_t)(const void*, const void*);
+
+typedef size_t(*o_hash_func_t)(const void*);
 
 #endif  // O_FUNCTIONS_H_
